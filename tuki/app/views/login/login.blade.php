@@ -27,6 +27,10 @@
 			.iconpic {
 				margin-bottom: 10px;
 				width: 220px;
+			}
+			.form-error {
+				margin-bottom: 2px;
+				margin-top: -16px
 			}		
 		</style>
 
@@ -47,21 +51,24 @@
 					<div class="large-6 columns ">
 						<img class="iconpic" src="vendor/login/icono.png" alt="tuki" />
 					</div>	
-					<div class="login-box large-6 columns">	
-					<!--<span class="secondary label large-12 columns">LOG IN</span>-->
-						<form id="login">													
+					<div class="login-box large-6 columns">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+						<form id="login">														
 							<div class="row">
 								<div class="large-12 columns">
+									<span class="form-error">Usuario o contraseña incorrectos</span>
 									<input type="text" name="username" placeholder="Usuario" />
+									<span class="form-error">Usuario requerido</span>
 								</div>
 							</div>
 							<div class="row">
 								<div class="large-12 columns">
 									<input type="password" name="password" placeholder="Contraseña" />
+									<span class="form-error">Contraseña requerida</span>
 								</div>
-							</div>
+							</div>						
 							<div id="but_log">							
-								<button class=" large-12 columns button expand" value="">INICIAR SESION</button>	
+								<button class=" large-12 columns button expand">INICIAR SESIÓN</button>	
 							</div>
 						</form>
 					</div>

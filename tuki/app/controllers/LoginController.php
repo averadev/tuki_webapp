@@ -1,9 +1,6 @@
 <?php
 
 class LoginController extends BaseController {
-	//public function __construct(){
-	//	$this->beforeFilter('csrf',array('on' => 'post'));
-	//}
 	/*
 	|--------------------------------------------------------------------------
 	| Controlador para el login
@@ -19,21 +16,25 @@ class LoginController extends BaseController {
 	}
 
 	public function postLogIn(){
-		$data = [
-			'nombre'  =>trim(Input::get('user')),
-			'password'=>trim(Input::get('pass'))
-		];
-		$rules = [
-			'nombre'   => 'required',
-			'password' =>'required'
-		];
-		$validator = Validator::make($data,$rules);
-		if( $validator->passes() ){
-			if (Auth::attempt($data)){
-				return Redirect::to('/');
+		if(Request::ajax()){
+			$data = [
+				'nombre'   => trim(Input::get('user')),
+				'password' => trim(Input::get('pass'))
+			];
+			$rules = [
+				'nombre'   => 'required',
+				'password' => 'required'
+			];
+			$validator = Validator::make($data,$rules);
+			if( $validator->passes() ){
+				if (Auth::attempt($data)){
+					return Response::json(array('success'=>true),200);
+				}else{
+					return Response::json(array('success'=>false),200);
+				}
 			}
+			return Redirect::back()->with('errorLogin',true);
 		}
-		return Redirect::back()->with('errorLogin',true);
 	}
 
 	public function getLogout(){

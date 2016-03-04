@@ -10,6 +10,16 @@
 			margin-left: 5px !important;
 			line-height: 50%;
 		}
+		.home-button{
+			padding:30px;
+		}
+		.logpic {
+			float: left;
+			margin-left: 20px;
+		}
+		.line-title {
+    		padding-bottom: 20px;
+		}			
 
 		</style>
 		<meta name="_token" content="{{ csrf_token() }}"/>
@@ -19,6 +29,7 @@
 	</head>
 	<body>
 		@include('template.header')
+		@yield('content')
 			<script src="{{ URL::asset('vendor/js/foundation/jquery.min.js') }}"></script>	
 			<script src="{{ URL::asset('vendor/js/foundation/foundation.min.js') }}"></script>		
 		@yield('addJs')
