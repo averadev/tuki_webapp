@@ -11,7 +11,7 @@ var lgn = function (){
 				}
 			})
 			if(!errorinput){
-				data = {
+			var	data = {
 					user: $("#login :input[name='username']").val(),
 					pass: $("#login :input[name='password']").val()
 				};
@@ -27,7 +27,6 @@ var lgn = function (){
 			dataType: 'json',
 			data: cred,
 		}).done(function(response) {
-			console.log(response);
 			if(response.success){
 				 location.reload();
 			}else{
@@ -35,7 +34,6 @@ var lgn = function (){
 			}
 
 		}).fail(function(response) {
-			console.log(response);
 		});	
 	}
 

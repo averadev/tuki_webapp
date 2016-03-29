@@ -1,12 +1,19 @@
-<div class="top-bar">
+<div class="top-bar white-color">
 <div class="top-bar-left">
-	<img class="logpic" src="vendor/login/logo.png" alt="tuki" />
+	<img class="header-logo left" src="vendor/login/logo.png" alt="tuki" />
 </div>
-	<div class="top-bar-right">
+	<div class="top-bar-right listblock">
 		<ul class="menu">
-			<li> </li>
-			<li>  <a class="button secondary tiny" href="{{URL::to('/logout')}}" data-action="userLogout"> LOG OUT  <i class="flaticon-arrow"></i> </a>  </li>
-
+			<li> 
+				<a href="{{URL::to('/')}}" >
+					<img style="width: 50px; height: 43px; font-family: HelveticaNeuel;" class="" src="{{ $commerce->image }}" alt="logo" />
+				</a>  
+			</li>
+			<li>  
+				<a href="{{URL::to('/logout')}}" >
+					<img class="" src="vendor/img/log_out.png" alt="logout" />
+				</a>  
+			</li>
 		</ul>
 	</div>
 </div>

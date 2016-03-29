@@ -12,6 +12,8 @@
 */
 
 
+	
+	Route::controller('/reportes', 'ReportController');
 	Route::controller('/', 'LoginController');
 	
 
