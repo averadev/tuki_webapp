@@ -12,11 +12,15 @@ class LoginController extends BaseController {
 		if(Auth::check()){
 			$id = Auth::id();
 			$data = Commerce::find($id);
+			$dataCommerce = new stdClass();
+			$dataCommerce->id = $data->id;
+			$dataCommerce->image = $data->image;
+			$dataCommerce->name = $data->name;
 			$now = new DateTime();
   			$month = $now->format('n');		
 			$dataChart = json_encode(Log_new_user_commerce::getDataByMonth($data,'03'));					
 			return View::make('welcome.home')
-			->with('commerce',$data)
+			->with('commerce',$dataCommerce)
 			->with('chartcom',$dataChart)
 			->with('month',$month);
 		}
