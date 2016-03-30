@@ -191,7 +191,7 @@
 	</div>
 	<div id="reportToExport" class="small-12 small-centered medium-10 medium-centered columns larger-10 large-centered" style="min-height: 400px; background-color: white;">
 	</div>
-	<div id="exportExcel" class="small-3 small-centered medium-2 medium-centered large-2 large-centered padding-top-20 columns">	
+	<div id="exportExcel" class="small-3 small-centered medium-2 medium-centered large-2 large-centered padding-top-20 columns" hidden="true">	
 		<label class="default button medium-12 large-8 large-centered columns" for="submit-form">Exportar</label>											
 	</div>
 @stop
