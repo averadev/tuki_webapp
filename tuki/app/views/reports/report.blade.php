@@ -8,19 +8,23 @@
 <div class="main-div" style="padding-bottom: 40px; font-family: oswaldoregular;">
 	<div style=" background-image: url('vendor/img/nube.png'); background-repeat: no-repeat; background-size: 50% 100%;  background-color: #00BFF1;  " >
 		<div class="row">
-			<div class="medium-12 large-12 columns" style="height: 130px; display: flex; align-items: center; padding: 0px; justify-content: center;">
-				<div class="medium-4 ">
-					<a href="{{URL::to('/')}}">
-						<img class="goback-bar" src="vendor/img/volver.png" alt="logo" />
-					</a>
+			<div class="medium-11 large-11 large-centered columns" style="height: 130px; display: flex; align-items: center; padding: 0px; justify-content: center;">
+				<div class="medium-4 large-4 large-centered columns ">
+					<div class="row">
+						<a href="{{URL::to('/')}}">
+							<img class="goback-bar" src="vendor/img/volver.png" alt="logo" />
+						</a>
+					</div>
 				</div>
-				<div class="medium-8 ">
-					<h2 class="header-text not-selectable" unselectable="on">REPORTES</h2>				
+				<div class="medium-8 large-8 large-centered columns">
+					<div class="row">
+						<h2 class="header-text not-selectable" unselectable="on">REPORTES</h2>
+					</div>			
 				</div>
 			</div>	
 		</div>		
 	</div>
-	<div class="container small-12 small-centered medium-10 medium-centered columns larger-10 large-centered" style=" background-color: white;">
+	<div class="container small-12 small-centered medium-10 medium-centered  larger-10 large-centered columns" style=" background-color: white;">
 		<div class="row">				
 			<div class="medium-12 columns form-report">
 				<div class="input-group">
@@ -183,6 +187,9 @@
 		</div>
 	</div>
 	<div id="reportToExport" class="small-12 small-centered medium-10 medium-centered columns larger-10 large-centered" style="min-height: 400px; background-color: white;">
+	</div>
+	<div id="exportExcel" class="small-3 small-centered medium-2 medium-centered large-2 large-centered padding-top-20 columns" hidden="true">									
+		<button  id="makeExcel" type="subtmit" class="default button medium-12 large-8 large-centered columns">EXPORTAR</button>					
 	</div>
 @stop
 @section('addJs')

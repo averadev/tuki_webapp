@@ -24,29 +24,16 @@ var report = function() {
 			$("#tableActiv").hide();
 		});
 
-		$('#make-report').click(function(event) {
-			$('#form-export span').removeClass('is-visible');
-			$('#reportToExport').empty();
-			$("#divCompare").hide();
-			$("#tableRedemptions").hide();
-			$('#dataCompare').empty();
-			$("#tableActiv").hide();
-			var errorinput = false;
-			$('#form-export input').each(function(){
-				if(!$(this).val()){
-					errorinput = true;
-					$(this).parent().next('span').addClass('is-visible');					
-				}
-			});
-			if(!errorinput){
-				var	data ={
-					reportType : $("#sel-report").val(),
-					startDate  : $('#dp1').val(),
-					endDate    : $('#dp2').val()
-				}		
-			getDataReport(data);
+		$('#makeExcel').click(function(event){
+			if(getInputsReport() !== 0){
+				makeReportExcel(getInputsReport());
 			}
+		});
 
+		$('#make-report').click(function(event) {
+			if(getInputsReport() !== 0){
+				getDataReport(getInputsReport());
+			}
 		});			
 	}
 	var getDataReport = function (inputs){
@@ -71,11 +58,9 @@ var report = function() {
 					$('#recVisitPeriod').text(getPorcent(countRedemptions,response.totalCheckIns));
 					$('#avgVisitClient').text(avgVisitClient);
 					$("#tableActiv").show();
-					if(response.dataRedemption.length > 0){
-					
+					if(response.dataRedemption.length > 0){					
 						makeRedemptionsReport(response);
 					}else{
-
 						//alert('NO SE ENCONTRARON DATOS');				
 					}
 				}/* END reporte de Actividades */
@@ -182,6 +167,21 @@ var report = function() {
 		}).fail(function(response) {
 		});	
 	}
+	var makeReportExcel = function (inputs){
+		$.ajax({
+			url: HOST+'/reportes/make-excel',
+			type: 'GET',
+			dataType: 'json',
+			data: inputs,
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		});
+	}
+	
 
 	var makeRedemptionsReport = function(response){
 		var countRedemptions = 0;
@@ -237,6 +237,31 @@ var report = function() {
        	var year  = (date).substring(6,10);
        	var date = day+'/'+getMonthNames(month)+'/'+year;
        	return date;
+	}
+
+	var getInputsReport = function(){
+			$('#form-export span').removeClass('is-visible');
+			$('#reportToExport').empty();
+			$("#divCompare").hide();
+			$("#tableRedemptions").hide();
+			$('#dataCompare').empty();
+			$("#tableActiv").hide();
+			var errorinput = false;
+			$('#form-export input').each(function(){
+				if(!$(this).val()){
+					errorinput = true;
+					$(this).parent().next('span').addClass('is-visible');					
+				}
+			});
+			if(!errorinput){
+				var	data ={
+					reportType : $("#sel-report").val(),
+					startDate  : $('#dp1').val(),
+					endDate    : $('#dp2').val()
+				}		
+			return data;
+			}
+		return 0;
 	}
 
 	var MakeDateNormalFormat = function(date){

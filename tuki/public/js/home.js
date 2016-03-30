@@ -18,6 +18,16 @@ var home = function (){
 			event.preventDefault();
 			window.location.href=HOST+"/reportes";
 		});
+		$("#comercio").click(function(event){
+			event.preventDefault();
+			var popup = new Foundation.Reveal($('#messageTuki'));
+			popup.open();
+		});
+		$('#recompensas').click(function(event) {
+			event.preventDefault();
+			var popup = new Foundation.Reveal($('#messageTuki'));
+			popup.open();
+		});	
 		$('#month-chart').on('change', function() {
 			$("#porcents").hide();
 		  sendDataChar();

@@ -72,6 +72,25 @@ class ReportController extends BaseController {
 		return $report;
 	}
 
+	public function makeExcel(){
+		if(Request::ajax()){
+			$data = [
+				'reportType' => trim(Input::get('reportType')),
+				'startDate'  => trim(Input::get('startDate')),
+				'endDate'    => trim(Input::get('endDate'))
+			];
+			$rules = [
+				'reportType' =>	'required',
+				'startDate'  => 'required',
+				'endDate'    => 'required'
+			];
+			$validator = Validator::make($data,$rules);	
+			if( $validator->passes() ){
+				$data  = (object)$data;
+				Excel::create('Filename');
+			}
+		}
+	}
 
 	private function combineReport($newUserReport,$ReportCheckIn,$period){
 		//$from = date('Y-m-d',strtotime(str_replace('/', '-', $period->startDate)));

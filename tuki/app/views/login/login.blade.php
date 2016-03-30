@@ -89,8 +89,6 @@
 			.wrapper{            
                width:100%;
                margin:auto;
-               min-width:1200px;
-               max-width:2100px;  	
 			}
 
 			.input-blue{

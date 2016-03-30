@@ -4,7 +4,7 @@
 	<div class="paddig-20" style=" background-image: url('vendor/img/nube.png'); background-repeat: no-repeat; background-size: 50% 100%;  background-color: #00BFF1;  " >
 		<div class="row">
 			<div class="large-12 columns" style="height: 130px; display: flex; align-items: center; justify-content: center;">
-				<div class="large-4 columns">
+				<div class="large-4 columns" style="padding-right: 50px;">
 					<img style="width: 110px; height: 110px; float: right;" class="divCircle" src="{{ $commerce->image }}" alt="logo" />
 				</div>
 				<div class="large-8 columns">
@@ -67,10 +67,18 @@
 			</div>
 		</div>
 	</div>
+<div class="reveal" id="messageTuki"  style="font-family: helveticaneuel; border: 1px solid #4E0664;"  data-reveal>
+  <h5>¡Gracias por ser parte del programa piloto de la plataforma TUKI!</h5>
+  <p >Por el momento estos módulos son de acceso restringido, por lo que  si requieres cualquier modificación por favor comunicate con nosotros y con gusto te apoyaremos.</p>
+  <p>¡Nuevamente gracias por confiar en TUKI para premiar a tus clientes e incrementar tus ventas!</p>
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 	<div class="row">
 		<div class="large-10 large-centered columns">
 			<div class="large-4 columns">
-				<button class="button homebutton appbuttons columns">
+				<button id="recompensas" class="button homebutton appbuttons columns">
 					<img style="width: 35px; display:block; margin: auto; " src="vendor/home/recompensas.png" alt="recompensas">
 					<p class="oswaldoregular" style="font-weight: bold; font-size: 33px; text-align: center; color: #0F1B5E; margin-bottom: 0px; margin-top: 10px">RECOMPENSAS</p>
 					<p style="font-family: Helvetica; font-size: 12px; font-weight: 600;">Crea, consulta y administra aquí las recompensas a otorgar a tus clientes. Conoce además cuales han sido las mas populares para conocer así los gustos de tus afiliados.</p>
@@ -84,7 +92,7 @@
 				</button>
 			</div>
 			<div class="large-4 columns">
-				<button class="button homebutton appbuttons columns">
+				<button id="comercio" class="button homebutton appbuttons columns">
 					<img style="width: 53px; display: block; margin: auto;" src="vendor/home/micomercio.png" alt="mi comercio">
 					<p class="oswaldoregular" style="font-weight: bold; font-size: 33px; text-align: center; color: #0F1B5E; margin-bottom: 0px; margin-top: 10px">MI COMERCIO</p>
 					<p style="font-family: Helvetica; font-size: 12px; font-weight: 600;">Configura toda la información de tu comercio en este módulo: Datos de contacto, logotipo, ubicación y más.</p>

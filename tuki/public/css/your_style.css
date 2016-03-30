@@ -6,6 +6,10 @@
  * - CUSTOM STYLES
  */
  /*Elementos y clases generales*/
+@media only screen and (min-width: 90.063em) { 
+
+} /* min-width 1441px, xlarge screens */
+
 .left{
 	float: left;
 }
@@ -57,6 +61,9 @@ background-color: white;
 	color: white !important; 
 }
 
+.padding-top-20{
+	padding-top: 20px;
+}
 
 .container{
 	margin-top: 20px;
