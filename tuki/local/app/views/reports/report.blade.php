@@ -162,7 +162,7 @@
 							Total de visitas registradas:
 						</td>
 						<td>
-							<label id="newClientesPeriod"></label>
+							<label id="totalCheckInsPeriod"></label>
 						</td>
 					</tr>
 					<tr>
@@ -170,7 +170,7 @@
 							Total de nuevos clientes:
 						</td>
 						<td>
-							<label id="totalCheckInsPeriod"></label>
+							<label id="newClientesPeriod"></label>
 						</td>
 					</tr>
 					<tr>
