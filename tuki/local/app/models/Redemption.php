@@ -31,7 +31,7 @@ class Redemption extends Eloquent
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
 		$from = Carbon::parse($from);
-		$to   = Carbon::parse($to);
+		$to   = Carbon::parse($to)->addHours(13);
 
 		$dailydata = $this->select(DB::raw('rwrd.name,count(*) as redemptions'))
 		->join('reward as rwrd','rwrd.id','=','idReward')
