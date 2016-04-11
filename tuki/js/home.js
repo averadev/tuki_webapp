@@ -20,6 +20,7 @@ var home = function (){
 		});
 		$("#comercio").click(function(event){
 			event.preventDefault();
+			//window.location.href=HOST+"/comercio";
 			var popup = new Foundation.Reveal($('#messageTuki'));
 			popup.open();
 		});

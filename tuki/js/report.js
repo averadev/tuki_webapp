@@ -16,12 +16,14 @@ var report = function() {
 		});	
 
 		$('#cleanreport').click(function(event) {
+			$('.form-error').removeClass('is-visible');
 			$('#form-export')[0].reset();
 			$('#reportToExport').empty();
 			$('#dataCompare').empty();
 			$("#divCompare").hide();
 			$("#tableRedemptions").hide();
 			$("#tableActiv").hide();
+			$("#divSubmitExcel").hide();
 		});
 
 		$('#makeExcel').click(function(event){
@@ -32,6 +34,7 @@ var report = function() {
 
 		$('#make-report').click(function(event) {
 			if(getInputsReport() !== 0){
+				$("#divSubmitExcel").hide();
 				getDataReport(getInputsReport());
 			}
 		});			
@@ -44,24 +47,29 @@ var report = function() {
 			data: inputs,
 		}).done(function(response) {
 			if(response.report){
+				console.log(response);
 				if(response.report == 1){ /*Report de Actividades*/
-					var avgVisitClient = Math.ceil((response.totalCheckIns/response.totalUsers));
-					if(isNaN(avgVisitClient) || !(isFinite(avgVisitClient))){
-						avgVisitClient =0;
-					}
-					var countRedemptions = 0;
-					$.each(response.dataRedemption, function(index, val) {
-						countRedemptions = countRedemptions + Number(val.redemptions);
-					});										
-					$('#totalCheckInsPeriod').text(response.totalCheckIns);
-					$('#newClientesPeriod').text(response.totalUsers);
-					$('#recVisitPeriod').text(getPorcent(countRedemptions,response.totalCheckIns));
-					$('#avgVisitClient').text(avgVisitClient);
-					$("#tableActiv").show();
-					if(response.dataRedemption.length > 0){					
-						makeRedemptionsReport(response);
+					if(response.totalCheckIns > 0 || response.totalUsers > 0 || response.dataRedemption.length > 0){
+						var avgVisitClient = Math.ceil((response.totalCheckIns/response.totalUsers));
+						if(isNaN(avgVisitClient) || !(isFinite(avgVisitClient))){
+							avgVisitClient =0;
+						}
+						var countRedemptions = 0;
+						$.each(response.dataRedemption, function(index, val) {
+							countRedemptions = countRedemptions + Number(val.redemptions);
+						});										
+						$('#totalCheckInsPeriod').text(response.totalCheckIns);
+						$('#newClientesPeriod').text(response.totalUsers);
+						$('#recVisitPeriod').text(getPorcent(countRedemptions,response.totalCheckIns));
+						$('#avgVisitClient').text(avgVisitClient);
+						$("#tableActiv").show();
+						$("#divSubmitExcel").show();
+						if(response.dataRedemption.length > 0){					
+							makeRedemptionsReport(response);
+						}
 					}else{
-						//alert('NO SE ENCONTRARON DATOS');				
+						$("#divSubmitExcel").hide();
+						alert('NO SE ENCONTRARON DATOS');				
 					}
 				}/* END reporte de Actividades */
 				if(response.report == 2){/* Reporte de afiliaciones y visitas */
@@ -122,10 +130,12 @@ var report = function() {
 						$("#crecvisi").text(crecimientoVisitas);
 						$("#divCompare").show();
 						$("#reportToExport .paging-nav").find("a[data-page='0']").addClass('selected-page');
+						$("#divSubmitExcel").show();
 					}else{
 						$('#reportToExport').empty();
 						$("#divCompare").hide();
 						$('#dataCompare').empty();
+						$("#divSubmitExcel").hide();
 						alert('NO SE ENCONTRARON DATOS');
 					}
 				}/* END reporte de afiliaciones y visitas */
@@ -155,11 +165,13 @@ var report = function() {
 							$('#tableUnconfirmed').append('<tbody>'+unconfirmedBodyTale+'</tbody>');
 							$('#tableUnconfirmed').paging({limit:2});
 							$("#reportToExport .paging-nav").find("a[data-page='0']").addClass('selected-page');
+							$("#divSubmitExcel").show();
 						}
 					}else{
 						$('#reportToExport').empty();
 						$("#tableRedemptions").hide();
 						$('#dataCompare').empty();
+						$("#divSubmitExcel").hide();
 						alert('NO SE ENCONTRARON DATOS');
 					}
 				} /*END Reporte de Redenciones*/
@@ -238,7 +250,6 @@ var report = function() {
 	}
 
 	var getInputsReport = function(){
-		console.log('foo');
 			$('#form-export span').removeClass('is-visible');
 			$('#reportToExport').empty();
 			$("#divCompare").hide();
@@ -249,16 +260,15 @@ var report = function() {
 
 			if( !($('#sel-report').val()) ){
 				errorinput = true;
-				$(this).parent().next('span').addClass('is-visible');	
 			}
 
 			if( !($('#dp1').val()) ){
 				errorinput = true;
-				$(this).parent().next('span').addClass('is-visible');	
+				$('#dp1').parent().next('span').addClass('is-visible');	
 			}
 			if( !($('#dp2').val()) ){
 				errorinput = true;
-				$(this).parent().next('span').addClass('is-visible');	
+				$('#dp2').parent().next('span').addClass('is-visible');		
 			}
 
 			if(!errorinput){
@@ -266,7 +276,10 @@ var report = function() {
 					reportType : $("#sel-report").val(),
 					startDate  : $('#dp1').val(),
 					endDate    : $('#dp2').val()
-				}		
+				}
+				$("input:hidden[name='reportType']").val(data.reportType);
+				$("input:hidden[name='startDate']").val(data.startDate);
+				$("input:hidden[name='endDate']").val(data.endDate);
 			return data;
 			}
 		return 0;
@@ -294,7 +307,6 @@ var report = function() {
 		if(isNaN(porcent)  || !(isFinite(porcent)) ){
 			porcent = 0;
 		}
-
 		return porcent+"%";
 	}
 	var onloadExec = function(){		

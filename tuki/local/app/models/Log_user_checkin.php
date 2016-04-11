@@ -21,7 +21,7 @@ class Log_user_checkin extends Eloquent
 			}
 			$data = self::select('dateAction')
 			->where('idCommerce','=',$idCommerce)
-			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end)))
+			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 12:59:59'))
 			->count();
 			 $items[$count++] = $data;
 		}
@@ -45,7 +45,7 @@ class Log_user_checkin extends Eloquent
 
 	public function getTotalCheckInsByPeriod($data){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
-		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
+		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)))).' 12:59:59';
 		$dailyData = self::select('idUser')
 		->whereBetween('dateAction',[$from, $to])
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
@@ -59,7 +59,7 @@ class Log_user_checkin extends Eloquent
 		$from = Carbon::parse($from);
 		$to = $from->copy()->lastOfMonth()->format('Y-m-d');
 		$dailyData = self::select('idUser')
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween('dateAction',[$from, $to.' 12:59:59'])
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
 		->count();
@@ -70,7 +70,7 @@ class Log_user_checkin extends Eloquent
 		$first = date('Y-'.$month.'-01');
 		$first = Carbon::parse($first);
 		$from = $first->copy()->subMonth();
-		$to = $from->copy()->lastOfMonth();
+		$to = $from->copy()->lastOfMonth()->addHours(13);
 		$dailyData = self::select('idUser')
 		->whereBetween('dateAction',[$from, $to])
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
@@ -119,7 +119,7 @@ class Log_user_checkin extends Eloquent
 			$toComp = $fromComp;
 		}
 		$dailyData = $this->select('dateAction as date', DB::raw('count(*) as views'))
-		->whereBetween('dateAction',[$fromComp, $toComp])
+		->whereBetween('dateAction',[$fromComp, $toComp->addHours(13)])
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->orderBy('dateAction','ASC')
 		->get();
