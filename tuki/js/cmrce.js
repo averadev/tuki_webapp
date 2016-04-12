@@ -4,7 +4,13 @@ var cmrce = function (){
 		$('select[name="colorpicker-picker-longlist"]').simplecolorpicker({picker: true});
 
 		$('#updateCommerce').click(function(event) {
+			event.preventDefault();
 			$('#addCommerce').find('span.form-error').text('Campo requerido');
+		});
+
+		$('#dismissModal').click(function(event) {
+			event.preventDefault();
+			$('#modal-logo').foundation('close');
 		});
 
 
@@ -35,6 +41,9 @@ var cmrce = function (){
 		});
 
 
+
+
+
 	$("#newCommerce").click(function(event){
 		event.preventDefault();
 		file = $("#fileupload")[0].files[0];
@@ -57,8 +66,8 @@ var cmrce = function (){
 		formData:{extra:1},
 		autoUpload: false,
 		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-		previewMaxWidth: 142,
-		previewMaxHeight: 142,
+		previewMaxWidth: 200,
+		previewMaxHeight: 200,
 		dropZone: $('.drop-zone-logotipo'),
 		replaceFileInput:false
 	}).on('fileuploadadd', function (e, data) {
@@ -74,9 +83,16 @@ var cmrce = function (){
 			file = data.files[index],
 			node = $(data.context.children()[index]);
 		if (file.preview) {
-			node
-				.prepend('<br>')
-				.prepend(file.preview);
+		var canvas = data.files[0].preview;
+		var dataURL = canvas.toDataURL();
+
+		$("#modal-logo .drop-zone-logotipo").empty();
+		$('#modal-logo .drop-zone-logotipo').append("<img id='imglogo' src=''/>");
+		$("#imglogo").attr("src", dataURL);
+		resizeableImage($('#imglogo'));
+
+		$('#modal-logo').foundation('open');
+
 		}
 		if (file.error) {
 			node
@@ -120,13 +136,12 @@ var cmrce = function (){
 
 	/*SUBIR IMAGEN PORTADA*/
 
-
 	$('#portada-upload').fileupload({
 		formData:{extra:1},
 		autoUpload: false,
 		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-		previewMaxWidth: 142,
-		previewMaxHeight: 142,
+		previewMaxWidth: 220,
+		previewMaxHeight: 137,
 		dropZone: $('.drop-zone-portada'),
 		replaceFileInput:false
 	}).on('fileuploadadd', function (e, data) {
@@ -142,9 +157,12 @@ var cmrce = function (){
 			file = data.files[index],
 			node = $(data.context.children()[index]);
 		if (file.preview) {
-			node
-				.prepend('<br>')
-				.prepend(file.preview);
+			var canvas = data.files[0].preview;
+			var dataURL = canvas.toDataURL();
+			$("#imgportada").remove();
+			$('.drop-zone-portada').append("<img id='imgportada' src=''/>");
+			$("#imgportada").attr("src", dataURL);
+			resizeableImage($('#imgportada'));
 		}
 		if (file.error) {
 			node
@@ -238,41 +256,6 @@ var cmrce = function (){
 
 
 	/*IMAGE RESIZE AND CROP*/
-	var editimage = function(){
-		$('.pane img').jrac({
-			'crop_width': 250,
-			'crop_height': 120,
-			'crop_left': 100,
-			'crop_top': 100,
-			'image_width': 400,
-			'viewport_onload': function() {
-				var $viewport = this;
-				var inputs = $viewport.$container.parent('.pane').find('.coords input:text');
-				var events = ['jrac_crop_x','jrac_crop_y','jrac_crop_width','jrac_crop_height','jrac_image_width','jrac_image_height'];
-				for (var i = 0; i < events.length; i++) {
-					var event_name = events[i];
-					// Register an event with an element.
-					$viewport.observator.register(event_name, inputs.eq(i));
-					// Attach a handler to that event for the element.
-					inputs.eq(i).bind(event_name, function(event, $viewport, value) {
-						$(this).val(value);
-					})
-					// Attach a handler for the built-in jQuery change event, handler
-					// which read user input and apply it to relevent viewport object.
-					.change(event_name, function(event) {
-						var event_name = event.data;
-						$viewport.$image.scale_proportion_locked = $viewport.$container.parent('.pane').find('.coords input:checkbox').is(':checked');
-						$viewport.observator.set_property(event_name,$(this).val());
-					})
-				}
-			}
-			})
-			// React on all viewport events.
-			.bind('jrac_events', function(event, $viewport) {
-				var inputs = $(this).parents('.pane').find('.coords input');
-				inputs.css('background-color',($viewport.observator.crop_consistent())?'chartreuse':'salmon');
-		});
-	}
 
 	
 	/*OTROS METODOS*/	

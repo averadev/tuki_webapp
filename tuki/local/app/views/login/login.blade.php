@@ -25,14 +25,18 @@
 				margin-bottom: 2px;
 				margin-top: 1px;
 			}
-			@font-face{
+			 @font-face{
 				font-family: 'oswaldoregular';
-				src: url('vendor/fonts/denseregular.ttf')  format('truetype'); 
+				src: url('vendor/fonts/denseregular.ttf')  format('truetype'),
+				url('vendor/fonts/denseregular.woff') format('woff'),
+				url('vendor/fonts/denseregular.eot') ; /* IE9 Compat Modes */
 			}
-	  		@font-face{
+  			@font-face{
 				font-family: 'helveticaneuel';
-				src: url('vendor/fonts/helveticaneuel.ttf')  format('truetype');
-			}		
+				src: url('vendor/fonts/helveticaneuel.ttf')  format('truetype'),
+				url('vendor/fonts/helveticaneuel.woff') format('woff'), 
+				url('vendor/fonts/helveticaneuel.eot'); /* IE9 Compat Modes */
+			}	
 
 			.button.home {
 				padding:10px;

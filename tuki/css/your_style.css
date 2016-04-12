@@ -70,9 +70,33 @@ background-color: white;
 	padding: 20px;
 }
 
+.form-container{
+	margin-top:20px;
+	padding-top: 10px;
+	padding-left:30px;
+}
+
 .font-form{
 	font-size: 1.5rem;
 }
+
+.label-form{
+	font-size: 25px;
+}
+
+.myfont{
+	font-family: helveticaneuel;
+}
+.form-error{
+	font-size: 20px;
+	line-height: 0;
+}
+
+.standard-form input, .standard-form textarea{
+	font-size: 24px;
+	line-height: 100%;
+}
+
 
 /*
 	Listas
@@ -113,6 +137,35 @@ background-color: white;
 	font-color: black;
 	font-weight: bold;
 }
+
+
+.button.formbutton {
+	padding: 7px 46px 7px 46px;
+	background-color: #0F1B5E;
+	color: white;
+	font-size: 25px;
+	font-family: oswaldoregular;
+}
+
+.button.formbutton:hover, .button.formbutton:focus {
+	background-color: #070d2c;
+	color: white; 
+	font-color: black;
+}
+
+.button.cancel {
+	padding: 7px 46px 7px 46px;
+	background-color: #BBBBBB;
+	color: white;
+	font-size: 25px;
+	font-family: oswaldoregular;
+}
+
+.button.cancel:hover, .button.calcel:focus {
+	background-color: #737373;
+	color: #fefefe; 
+}
+
 
 .form-report{
 	margin-bottom: 20px;
@@ -349,6 +402,10 @@ p.grap-porcent{
   margin: 0 auto;
 }
 
+.content-body{
+	padding-top: 30px;
+}
+
 
 
 
@@ -361,4 +418,80 @@ p.grap-porcent{
 	-o-user-select: none;
 	user-select: none;
 	/*for obera and ie9 add attr unselectable="on"*/
+}
+
+.custom-panel-heading {
+	background: #5f6f81 none repeat scroll 0 0;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	color: #fff;
+	padding-left: 20px;
+	font-size: 30px;
+}
+
+.custom-panel-details {
+    background: #fff none repeat scroll 0 0;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 20px;
+}
+
+.custom-panel-footer{
+	margin-top:50px;
+}
+
+.drop-zone-logotipo{
+	width:  203px;
+	height: 203px;
+	border: dotted;
+	margin-bottom: 16px;	
+}
+
+.logo-zone{
+	width:  140px;
+	height: 140px;
+	border: dotted;
+	margin-bottom: 16px;
+	
+}
+
+.drop-zone-portada{
+	width:  220px;
+	height: 140px;
+	border: dotted;
+	margin-bottom: 16px;
+	
+}
+
+
+
+
+textarea {
+    resize: none;
+}
+
+.component{
+	overflow: hidden;
+	position: relative;
+}
+
+
+
+/*COLOR PICKER*/
+
+.simplecolorpicker.picker{
+	min-width: 158px !important;
+	max-width: 158px !important;
+}
+.simplecolorpicker.icon{
+	width: 151px;
+	margin-top: 10px;
+}
+
+.gllpLatlonPicker{
+       
+	
+
 }

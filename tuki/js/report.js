@@ -63,7 +63,7 @@ var report = function() {
 						$('#recVisitPeriod').text(getPorcent(countRedemptions,response.totalCheckIns));
 						$('#avgVisitClient').text(avgVisitClient);
 						$("#tableActiv").show();
-						//$("#divSubmitExcel").show();
+						$("#divSubmitExcel").show();
 						if(response.dataRedemption.length > 0){					
 							makeRedemptionsReport(response);
 						}
@@ -130,7 +130,7 @@ var report = function() {
 						$("#crecvisi").text(crecimientoVisitas);
 						$("#divCompare").show();
 						$("#reportToExport .paging-nav").find("a[data-page='0']").addClass('selected-page');
-						//$("#divSubmitExcel").show();
+						$("#divSubmitExcel").show();
 					}else{
 						$('#reportToExport').empty();
 						$("#divCompare").hide();
@@ -165,7 +165,7 @@ var report = function() {
 							$('#tableUnconfirmed').append('<tbody>'+unconfirmedBodyTale+'</tbody>');
 							$('#tableUnconfirmed').paging({limit:2});
 							$("#reportToExport .paging-nav").find("a[data-page='0']").addClass('selected-page');
-							//$("#divSubmitExcel").show();
+							$("#divSubmitExcel").show();
 						}
 					}else{
 						$('#reportToExport').empty();

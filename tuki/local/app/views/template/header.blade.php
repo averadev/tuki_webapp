@@ -7,12 +7,12 @@
 			<ul class="menu">
 				<li> 
 					<a href="{{URL::to('/')}}" >
-						<img style="width: 50px; height: 43px; font-family: HelveticaNeuel;" class="" src="{{ 	$commerce->image }}" alt="logo" />
+						<img style="width: 50px; height: 50px; font-family: HelveticaNeuel;" class="" src="{{ 	$commerce->image }}" alt="logo" />
 					</a>  
 				</li>
 				<li>  
 					<a href="{{URL::to('/logout')}}" >
-						<img class="" src="vendor/img/log_out.png" alt="logout" />
+						<img style="width: 50px; height: 50px;" class="" src="vendor/img/log_out.png" alt="logout" />
 					</a>  
 				</li>
 			</ul>		

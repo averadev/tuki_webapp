@@ -111,13 +111,13 @@
 						</tr>
 						<tr>
 						  <td>
-							  Crecimiento afiliaciones vs periodo anteior:
+							  Crecimiento afiliaciones vs periodo anterior:
 						  </td>
 						  <td>
 								<label id="crecAfi"></label>
 						  </td>
 						  <td>
-							  Crecimiento visitas vs periodo anteior:
+							  Crecimiento visitas vs periodo anterior:
 						  </td>
 						  <td>
 							   <label id="crecvisi"></label>
