@@ -22,8 +22,14 @@
     				height: auto;
 			}
 			.form-error {
-				margin-bottom: 2px;
-				margin-top: 1px;
+				font-size: 0.75rem !important;
+				line-height: 1.5 !important;
+				padding-bottom: 2px !important;
+				margin-top: -15px;
+				margin-bottom: -3px !important;
+			}
+			.showErrorCredentials{
+				margin-top: 0px;
 			}
 			 @font-face{
 				font-family: 'oswaldoregular';
@@ -148,7 +154,7 @@
 												<form id="login">														
 													<div class="row">
 														<div class="small-12 medium-12 large-12 columns">
-															<span class="form-error">Usuario o contraseña incorrectos</span>
+															<span class="form-error showErrorCredentials">Usuario o contraseña incorrectos</span>
 															<input class="input-blue" type="text" name="username" placeholder="Usuario" />
 															<span style="margin-top: -14px;" style="" class="form-error">Usuario requerido</span>
 														</div>

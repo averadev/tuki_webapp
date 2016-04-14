@@ -48,7 +48,7 @@
 				    $(document).foundation();
 				    var HOST = "{{URL::to('/')}}";
 			</script>
-
+		{{HTML::script('js/global.js')}}
 		@yield('addJs')
 	</body>
 </html>

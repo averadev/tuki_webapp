@@ -35,7 +35,7 @@
 	padding-left: 20px;
 }
 .header-logo{	
-	margin: 10px 0 10px 35px;
+	margin: 13px 0 10px 35px;
 	width: 140px;
 }
 .white-color{
@@ -70,6 +70,26 @@ background-color: white;
 	padding: 20px;
 }
 
+.message-alert{
+	font-size: 15px;
+	font-family: Helvetica, Roboto, Arial, sans-serif;
+}
+
+.show-panel-message{
+	display: inherit ;
+}
+
+.hide-panel-message{
+	display: none ;
+}
+
+.callout{
+	margin: 0px !important;
+
+	padding-left: 20px !important;
+	padding-bottom: 5px !important;
+}
+
 .form-container{
 	margin-top:20px;
 	padding-top: 10px;
@@ -87,10 +107,7 @@ background-color: white;
 .myfont{
 	font-family: helveticaneuel;
 }
-.form-error{
-	font-size: 20px;
-	line-height: 0;
-}
+
 
 .standard-form input, .standard-form textarea{
 	font-size: 24px;
@@ -222,7 +239,7 @@ background-color: white;
     border-radius: 50%;
     behavior: url(PIE.htc); /* Para IE8 */
     background: white;
-    padding:8px;
+    padding:3px;
     margin: 10px;
 }
 .footer-form{
@@ -443,10 +460,10 @@ p.grap-porcent{
 }
 
 .drop-zone-logotipo{
-	width:  203px;
-	height: 203px;
-	border: dotted;
-	margin-bottom: 16px;	
+	width:  140px !important;
+	height: 140px !important;
+	border: 3px dotted black !important;
+	margin-bottom: 16px !important;	
 }
 
 .logo-zone{
@@ -458,26 +475,39 @@ p.grap-porcent{
 }
 
 .drop-zone-portada{
-	width:  220px;
-	height: 140px;
-	border: dotted;
-	margin-bottom: 16px;
-	
+	width:  220px !important;
+	height: 140px !important;
+	border: 3px dotted black !important;
+	margin-bottom: 16px !important;		
+}
+img[src=""] {
+   display: none;
 }
 
+.overlay.portada{
+	width: 440px !important;
+	height: 280px !important;
+	margin-left: -223px !important;
+	margin-top: -138px !important;
+}
+.component.portada{
+	max-width: 520px !important;
+	height: 330px !important;
+	padding-left: 36px;
+	padding-top: 26px;
+}
 
+h1,h2,h3,h4,h5{
+	color: black;
+}
 
+.centerHeader{
+	text-align: center;
+}
 
 textarea {
     resize: none;
 }
-
-.component{
-	overflow: hidden;
-	position: relative;
-}
-
-
 
 /*COLOR PICKER*/
 
@@ -490,8 +520,7 @@ textarea {
 	margin-top: 10px;
 }
 
-.gllpLatlonPicker{
-       
-	
+.gllpMap{
+width: 100% !important;
 
 }

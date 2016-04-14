@@ -1,11 +1,61 @@
 var cmrce = function (){
 	var bindEvents = function(){
-		
+		$("#logo").val('');
+		$("#portada").val('');
 		$('select[name="colorpicker-picker-longlist"]').simplecolorpicker({picker: true});
+
+		$form.on("formvalid.zf.abide", function(ev,elem) {
+			var emptyimage = false;			
+			form = {
+				'name' 		  :$('#commerceName').val(),
+				'description' :$('#descriptionCom').val(),
+				'color' 	  :$('select[name="colorpicker-picker-longlist"]').find(':selected').data('color'),
+				'logo' 		  :$("#logo").val(),
+				'portada' 	  :$("#portada").val(),
+				'address' 	  :$('#addressCom').val(),
+				'phone' 	  :$('#phoneCom').val(),
+				'website' 	  :$('#webCom').val(),
+				'facebook' 	  :$('#facebook').val(),
+				'twitter' 	  :$('#twitter').val(),
+				'lat' 		  :$('#latCom').val(),
+				'long' 		  :$('#longCom').val()
+			};
+	
+			if($('#imgportadatoshow').attr('src') == '') {
+				emptyimage = true;
+				//$('#imgportadatoshow').parent().parent().find('label').addClass('is-invalid-label');
+				$('#imgportadatoshow').parent().parent().find('span.form-error').text('La portada es requerida');
+				$('#imgportadatoshow').parent().parent().find('span').addClass('is-visible');
+				$('#fileupload').focus();
+			}
+			if($('#imglogotoshow').attr('src') == '') {
+				emptyimage = true;
+				//$('#imglogotoshow').parent().parent().find('label').addClass('is-invalid-label');
+				$('#imgportadatoshow').parent().parent().find('span.form-error').text('El logotipo es requerido');
+				$('#imglogotoshow').parent().parent().find('span').addClass('is-visible');
+				$('#portada-upload').focus()
+			}
+			if(!emptyimage){
+				sendData(form);
+			}			
+		});
+
+		$('#cancelCommerce').click(function(event) {
+			event.preventDefault();
+			window.location.href=HOST;
+		});
+
 
 		$('#updateCommerce').click(function(event) {
 			event.preventDefault();
+			$('#addCommerce').foundation('validateForm');	
 			$('#addCommerce').find('span.form-error').text('Campo requerido');
+   					
+		});
+
+		$('#closeModal').click(function(event) {
+			event.preventDefault();
+			$('#modal-portada').foundation('close');
 		});
 
 		$('#dismissModal').click(function(event) {
@@ -13,218 +63,102 @@ var cmrce = function (){
 			$('#modal-logo').foundation('close');
 		});
 
+		$('#saveLogo').click(function(event) {
+			event.preventDefault();
+			var img = document.getElementById("imglogo");
+			$container =  $('#imglogo').parent('.resize-container');
+			var crop_canvas,
+			left = $('.overlay').offset().left - $container.offset().left,
+			top =  $('.overlay').offset().top - $container.offset().top,
+			width = $('.overlay').width(),
+			height = $('.overlay').height();
 
+			crop_canvas = document.createElement('canvas');
+			crop_canvas.width = width;
+			crop_canvas.height = height;
+			
+			crop_canvas.getContext('2d').drawImage(img, left+2, top+1, width, height, 0, 0, width, height);
+			$("#imglogotoshow").attr("src",crop_canvas.toDataURL("image/png"));
+			$("#logo").val(crop_canvas.toDataURL("image/png"));
+			$('#modal-logo').foundation('close');
+		});
 
-		$('#fileupload').change(function(e){
-			e.preventDefault();
-			var file = this.files[0];
-		
-		//var bar = new FormData($('#addCommerce')[0]);
-		//var formdata = document.forms.namedItem("addCommerce"); // high importance!, here you need change "yourformname" with the name of your form
-		//var form = new FormData(formdata); // high importance!
-		
-		 	file = $("#fileupload")[0].files[0];
-		   var form = new FormData();
-		   form.append('fileupload', file);
-			console.log(form);
-			$.ajax({
-				url : HOST+'/comercio/store-commerce',
-				type: "POST",
-				dataType: "json", // or html if you want...
-				contentType: false,
-				processData: false,
-				data : form,
-				success: function(response){
-					console.log(response);
+		$('#savePortada').click(function(event) {
+			event.preventDefault();
+			var img = document.getElementById("imgportada");
+			$container =  $('#imgportada').parent('.resize-container');
+			var crop_canvas,
+			left = $('.overlay.portada').offset().left - $container.offset().left,
+			top =  $('.overlay.portada').offset().top - $container.offset().top,
+			width = $('.overlay.portada').width(),
+			height = $('.overlay.portada').height();
+			crop_canvas = document.createElement('canvas');
+			crop_canvas.width = width;
+			crop_canvas.height = height;			
+			crop_canvas.getContext('2d').drawImage(img, left+2, top+2, width, height, 0, 0, width, height);
+			//window.open(crop_canvas.toDataURL("image/png"));
+			$("#imgportadatoshow").attr("src",crop_canvas.toDataURL("image/png"));
+			$("#portada").val(crop_canvas.toDataURL("image/png"));
+			$('#modal-portada').foundation('close');
+		});
+
+		$('input[name=portada-upload]').change(function(e) {
+			var file = e.target.files[0];
+			//console.log(file);
+			canvasResize(file, {
+				width: 440,
+				height: 280,
+				crop: false,
+				quality: 100,
+				//rotate: 90,
+				callback: function(data, width, height) {
+					var newComponent = 	"<div class='overlay portada'><div class='overlay-inner'></div></div><img id='imgportada' src=''/>";
+					$("#modal-portada .component").empty();
+					$('#modal-portada .component').append(newComponent);
+					$("#imgportada").attr("src", data);
+					resizeableImage($('#imgportada'));	
+					$('#modal-portada').foundation('open');
+				}
+			});
+		});	
+		$('input[name=logo-upload]').change(function(e) {
+			var file = e.target.files[0];
+			canvasResize(file, {
+				width: 200,
+				height: 200,
+				crop: false,
+				quality: 100,
+				//rotate: 90,
+				callback: function(data, width, height) {
+					var newComponent = 	"<div class='overlay'><div class='overlay-inner'></div></div><img id='imglogo' src=''/>";
+					$("#modal-logo .component").empty();
+					$('#modal-logo .component').append(newComponent);
+					$("#imglogo").attr("src", data);
+					resizeableImage($('#imglogo'));	
+					$('#modal-logo').foundation('open');
 				}
 			});
 		});
-
-
-
-
-
-	$("#newCommerce").click(function(event){
-		event.preventDefault();
-		file = $("#fileupload")[0].files[0];
-		var form = new FormData();
-		form.append('fileupload', file);
-		data = {
-			commerce: 'hi',
-			month: 'delul',
-			chart: 'cdee'
-		};
-		form.append('data', data);
-
-		sendData(form);
-	});
-
-	/*SUBIR IMAGEN LOGOTIPO*/
-
-	var uploadButton = ('<p class="tagprocess"> Subiendo ... </p>');
-	$('#fileupload').fileupload({
-		formData:{extra:1},
-		autoUpload: false,
-		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-		previewMaxWidth: 200,
-		previewMaxHeight: 200,
-		dropZone: $('.drop-zone-logotipo'),
-		replaceFileInput:false
-	}).on('fileuploadadd', function (e, data) {
-		$('#files').empty();
-		data.context = $('<div/>').appendTo('#files');
-		$.each(data.files, function (index, file) {
-			var node = $('<p/>').append(uploadButton);
-					//.append($('<span/>').text(file.name));
-			node.appendTo(data.context);
-		});
-	}).on('fileuploadprocessalways', function (e, data) {
-		var index = data.index,
-			file = data.files[index],
-			node = $(data.context.children()[index]);
-		if (file.preview) {
-		var canvas = data.files[0].preview;
-		var dataURL = canvas.toDataURL();
-
-		$("#modal-logo .drop-zone-logotipo").empty();
-		$('#modal-logo .drop-zone-logotipo').append("<img id='imglogo' src=''/>");
-		$("#imglogo").attr("src", dataURL);
-		resizeableImage($('#imglogo'));
-
-		$('#modal-logo').foundation('open');
-
-		}
-		if (file.error) {
-			node
-				.append('<br>')
-				.append($('<span class="text-danger"/>').text(file.error));
-		}
-		if (index + 1 === data.files.length) {
-			data.context.find('p.tagprocess')
-				.text('');
-		}
-	}).on('fileuploadprogressall', function (e, data) {
-		var progress = parseInt(data.loaded / data.total * 100, 10);
-		$('#progress .progress-bar').css(
-			'width',
-			progress + '%'
-		);
-	}).on('fileuploaddone', function (e, data) {
-		$.each(data.result.files, function (index, file) {
-			if (file.url) {
-				var link = $('<a>')
-					.attr('target', '_blank')
-					.prop('href', file.url);
-				$(data.context.children()[index])
-					.wrap(link);
-			} else if (file.error) {
-				var error = $('<span class="text-danger"/>').text(file.error);
-				$(data.context.children()[index])
-					.append('<br>')
-					.append(error);
-			}
-		});
-	}).on('fileuploadfail', function (e, data) {
-		$.each(data.files, function (index) {
-			var error = $('<span class="text-danger"/>').text('Error al subir archivo');
-			$(data.context.children()[index])
-				.append('<br>')
-				.append(error);
-		});
-	}).prop('disabled', !$.support.fileInput)
-		.parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-	/*SUBIR IMAGEN PORTADA*/
-
-	$('#portada-upload').fileupload({
-		formData:{extra:1},
-		autoUpload: false,
-		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-		previewMaxWidth: 220,
-		previewMaxHeight: 137,
-		dropZone: $('.drop-zone-portada'),
-		replaceFileInput:false
-	}).on('fileuploadadd', function (e, data) {
-		$('#files-portada').empty();
-		data.context = $('<div/>').appendTo('#files-portada');
-		$.each(data.files, function (index, file) {
-			var node = $('<p/>').append(uploadButton);
-					//.append($('<span/>').text(file.name));
-			node.appendTo(data.context);
-		});
-	}).on('fileuploadprocessalways', function (e, data) {
-		var index = data.index,
-			file = data.files[index],
-			node = $(data.context.children()[index]);
-		if (file.preview) {
-			var canvas = data.files[0].preview;
-			var dataURL = canvas.toDataURL();
-			$("#imgportada").remove();
-			$('.drop-zone-portada').append("<img id='imgportada' src=''/>");
-			$("#imgportada").attr("src", dataURL);
-			resizeableImage($('#imgportada'));
-		}
-		if (file.error) {
-			node
-				.append('<br>')
-				.append($('<span class="text-danger"/>').text(file.error));
-		}
-		if (index + 1 === data.files.length) {
-			data.context.find('p.tagprocess')
-				.text('');
-		}
-	}).on('fileuploadprogressall', function (e, data) {
-		var progress = parseInt(data.loaded / data.total * 100, 10);
-		$('#progress .progress-bar').css(
-			'width',
-			progress + '%'
-		);
-	}).on('fileuploaddone', function (e, data) {
-		$.each(data.result.files, function (index, file) {
-			if (file.url) {
-				var link = $('<a>')
-					.attr('target', '_blank')
-					.prop('href', file.url);
-				$(data.context.children()[index])
-					.wrap(link);
-			} else if (file.error) {
-				var error = $('<span class="text-danger"/>').text(file.error);
-				$(data.context.children()[index])
-					.append('<br>')
-					.append(error);
-			}
-		});
-	}).on('fileuploadfail', function (e, data) {
-		$.each(data.files, function (index) {
-			var error = $('<span class="text-danger"/>').text('Error al subir archivo');
-			$(data.context.children()[index])
-				.append('<br>')
-				.append(error);
-		});
-	}).prop('disabled', !$.support.fileInput)
-		.parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-
-
 	}
 	/*AJAX REQUESTS*/
 	var sendData = function (form){
 		$.ajax({
 			type: "POST",
-			dataType: "json", // or html if you want...
-			contentType: false, // high importance!
+			dataType: "json", 
 			url:  HOST+'/comercio/store-commerce',
-			data: form, // high importance!
-			processData: false, // high importance!
-		})
-		.done(function(response) {
-			console.log(response);
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-			console.log("complete");
+			data: form, 
+		}).done(function(response) {
+			if(!response.error){
+				showPanelSuccess(response.msg);
+				if($("#logo").val() !== ''){
+					$("#logo_header").attr("src", $("#logo").val());
+				}
+				$("#logo").val('');
+				$("#portada").val('');
+			}else{
+				showPanelAlert(response.msg);
+			}
+		}).fail(function() {
 		});
 	}
 
@@ -251,6 +185,11 @@ var cmrce = function (){
 				$el.next('span').text('No debe ser mayor de 150 caracteres');
 				return false;
 			}			
+		},Foundation.Abide.defaults.validators['check-coords'] = function($el,required,parent) {
+			if ((!regExp_Coords($el.val()))) {
+				$el.next('span').text('Verifique campo');
+				return false;
+			}			
 		}
 	}
 
@@ -261,7 +200,8 @@ var cmrce = function (){
 	/*OTROS METODOS*/	
 
 
-	var onloadExec = function(){		
+	var onloadExec = function(){
+	 	$form    = $('#addCommerce');		
 		bindEvents();
 		validation();
 	}

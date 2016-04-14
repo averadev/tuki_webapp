@@ -12,22 +12,36 @@ return array(
 	| as the size rules. Feel free to tweak each of these messages here.
 	|
 	*/
-
-	"accepted"             => "The :attribute must be accepted.",
-	"active_url"           => "The :attribute is not a valid URL.",
-	"after"                => "The :attribute must be a date after :date.",
-	"alpha"                => "The :attribute may only contain letters.",
-	"alpha_dash"           => "The :attribute may only contain letters, numbers, and dashes.",
-	"alpha_num"            => "The :attribute may only contain letters and numbers.",
-	"array"                => "The :attribute must be an array.",
-	"before"               => "The :attribute must be a date before :date.",
+	
+	"accepted"                    => "The :attribute must be accepted.",
+	"active_url"                  => "The :attribute is not a valid URL.",
+	"address"                     => "The :attribute may only contain letters, numbers, dashes, underscores and dots and comas",
+	"after"                       => "The :attribute must be a date after :date.",
+	"alpha"                       => "The :attribute may only contain letters.",
+	"alpha_dash"                  => "The :attribute may only contain letters, numbers, and dashes.",
+	"alpha_num"                   => "The :attribute may only contain letters and numbers.",
+	"alpha_spaces"                => "The :attribute may only contain letters and spaces.",
+	"alpha_spaces_coma"           => "The :attribute may only contain letters, spaces and coma.",
+	"alpha_spaces_num"            => "The :attribute may only contain letters, numbers and spaces",
+	"alpha_spaces_dot"            => "The :attribute may only contain letters, coma and dot.",
+	"alpha_num_character"         => "The :attribute may only contain letters, numbers.",
+	"alpha_num_character_special" => "The :attribute may only contain letters, numbers and some special characters",
+    "alpha_num_sppdc"          	  => "The :attribute may only contain letters, numbers and some special characters",	
+	"AlphaNumEspaceCPG"           => "The :attribute may only contain letters, numbers and (,.)",
+	"array"                       => "The :attribute must be an array.",
+	"array_numeric"               => "The :attribute must be an array numeric",
+	"before"                      => "The :attribute must be a date before :date.",
 	"between"              => array(
 		"numeric" => "The :attribute must be between :min and :max.",
 		"file"    => "The :attribute must be between :min and :max kilobytes.",
 		"string"  => "The :attribute must be between :min and :max characters.",
 		"array"   => "The :attribute must have between :min and :max items.",
 	),
+	"boolean"              => "The :attribute field must be true or false.",
+	"current_month"        => "The month is not current",
+	"after_month"          => "The period it´s over",
 	"confirmed"            => "The :attribute confirmation does not match.",
+	"comment"			   => "The :attribute may only contain letters, numbers, dashes, underscores and dots and comas",
 	"date"                 => "The :attribute is not a valid date.",
 	"date_format"          => "The :attribute does not match the format :format.",
 	"different"            => "The :attribute and :other must be different.",
@@ -39,6 +53,8 @@ return array(
 	"in"                   => "The selected :attribute is invalid.",
 	"integer"              => "The :attribute must be an integer.",
 	"ip"                   => "The :attribute must be a valid IP address.",
+	"json"                 => "The :attribute JSON format not valid.",
+    "array_of_ids"     	   => "Format no validate (1,2,3).",	
 	"max"                  => array(
 		"numeric" => "The :attribute may not be greater than :max.",
 		"file"    => "The :attribute may not be greater than :max kilobytes.",
@@ -54,6 +70,7 @@ return array(
 	),
 	"not_in"               => "The selected :attribute is invalid.",
 	"numeric"              => "The :attribute must be a number.",
+	"phone"                => "The :attribute may only contain numbers, spaces and this special caracters -/()",
 	"regex"                => "The :attribute format is invalid.",
 	"required"             => "The :attribute field is required.",
 	"required_if"          => "The :attribute field is required when :other is :value.",
@@ -62,6 +79,7 @@ return array(
 	"required_without"     => "The :attribute field is required when :values is not present.",
 	"required_without_all" => "The :attribute field is required when none of :values are present.",
 	"same"                 => "The :attribute and :other must match.",
+	"schedule"             => "The :attribute may only contain letters, numbers and dashes.",
 	"size"                 => array(
 		"numeric" => "The :attribute must be :size.",
 		"file"    => "The :attribute must be :size kilobytes.",
@@ -70,6 +88,8 @@ return array(
 	),
 	"unique"               => "The :attribute has already been taken.",
 	"url"                  => "The :attribute format is invalid.",
+	"timezone"             => "The :attribute must be a valid zone.",
+	"time_with_meridian"   => "The :attribute format is invalid.",
 
 	/*
 	|--------------------------------------------------------------------------

@@ -57,9 +57,9 @@
 	margin-left: -100px;
 	margin-top: -100px;
 	z-index: 999;
-	width: 200px;
+	width: 	200px;
 	height: 200px;
-    border: solid 2px rgba(222,60,80,.9);
+    border: dotted 2px black;
 	box-sizing: content-box;
 	pointer-events: none;
 }
@@ -71,8 +71,6 @@
 	display: block;
 	width: 204px;
 	height: 40px;
-    border-left: dashed 2px rgba(222,60,80,.9);
-	border-right: dashed 2px rgba(222,60,80,.9);
 }
 
 .overlay:before {
@@ -94,8 +92,7 @@
 	display: block;
 	width: 40px;
 	height: 204px;
-    border-top: dashed 2px rgba(222,60,80,.9);
-	border-bottom: dashed 2px rgba(222,60,80,.9);
+
 }
 
 .overlay-inner:before {

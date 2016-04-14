@@ -131,4 +131,34 @@ class Helper
    		return $hex; // returns the hex value including the number sign (#)
 	}
 
+	/*Guarda imagenes*/
+
+	public static function saveImage($imgdata,$prefixName,$pathimg,$extension){
+		$time = microtime(true) * 10000;
+		$name = $prefixName.'_'.$time.$extension;
+		$path = public_path($pathimg.$name);
+		list($type, $imgdata) = explode(';', $imgdata);
+		list(, $imgdata)      = explode(',', $imgdata);
+		if(self::validBase64($imgdata)){
+			$imgdata = base64_decode($imgdata);
+			$img = Image::make($imgdata)->save($path);
+			return $pathimg.$name;
+		}
+		return false;
+	}
+
+	private static function validBase64($string){
+        $decoded = base64_decode($string, true);
+        // Check if there is no invalid character in string
+        if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string)) return false;
+
+        // Decode the string in strict mode and send the response
+         if(!base64_decode($string, true)) return false;
+
+        // Encode and compare it to origional one
+        if(base64_encode($decoded) != $string) return false;
+
+        return true;
+    }
+
 }
