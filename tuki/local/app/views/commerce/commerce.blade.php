@@ -90,7 +90,7 @@
 								<div class="small-12 medium-6 large-6 columns">
 									<label class="label-form">Tu imagen de logotipo:</label>
 										<div class="logo-zone drop-zone-logotipo">
-											<img data-validator="max100char" id="imglogotoshow" src="{{$commerce->image }}"/>
+											<img id="imglogotoshow" src="{{$commerce->image }}"/>
 											<input id="logo" type="hidden">
 										</div>
 																			
@@ -101,7 +101,7 @@
 								<div class="small-12 medium-6 large-6 large columns">
 									<label class="label-form">Tu imagen de portada: </label>	
 										<div class="drop-zone-portada">
-											<img onerror="this.style.display='none'" id="imgportadatoshow" src="{{$commerce->banner}}"/>
+											<img id="imgportadatoshow" src="{{$commerce->banner}}"/>
 											<input id="portada" type="hidden">
 										</div>
 									<label for="portada-upload" class="formbutton button ">Examinar</label>
