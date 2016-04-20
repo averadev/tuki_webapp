@@ -9,17 +9,13 @@ class ReportController extends BaseController {
 	|
 	*/
 	function __construct(){
-		//$this->beforeFilter('auth');
-		//$this->beforeFilter('csrf',array('except'=>array('getIndex')));
+		$this->beforeFilter('auth');
+		$this->beforeFilter('csrf',array('except'=>array('getIndex','getMakeExcel','getReport')));
 	}
 	public function getIndex(){
-		if (Auth::check())
-		{   
 			$data = Commerce::getCommerceID();
 			return View::make('reports.report')
 			->with('commerce',$data);
-		}
-		return Redirect::to('/');
 	}
 	public function getReport(){
 		if(Request::ajax()){
@@ -62,13 +58,13 @@ class ReportController extends BaseController {
 		}
 	}
 
-	public function makeReport($period){
+	private function makeReport($period){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $period->startDate)));
-		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $period->endDate)))).' 12:59:59';
+		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $period->endDate))));
 		
 		$report = DB::select("select date_format((date),'%d-%m-%Y') as date, (SELECT count(*) FROM log_user_checkin WHERE date(log_user_checkin.dateAction) = dates.date AND idCommerce = '".Commerce::getCommerceID()->id."') as views,
 				(SELECT count(*) FROM log_new_user_commerce WHERE date(log_new_user_commerce.dateAction) = dates.date AND idCommerce = '".Commerce::getCommerceID()->id."') AS afiliations
-				FROM dates WHERE date BETWEEN '".$from ."' AND '".$to .' 12:59:59'."' ORDER BY date ");
+				FROM dates WHERE date BETWEEN '".$from ."' AND '".$to."' ORDER BY date ");
 		return $report;
 	}
 

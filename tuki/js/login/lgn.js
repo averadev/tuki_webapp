@@ -28,7 +28,7 @@ var lgn = function (){
 			data: cred,
 		}).done(function(response) {
 			if(response.success){
-				 location.reload();
+				window.location.href=HOST+'/home';
 			}else{
 				$('#login span:first-child ').addClass('is-visible');
 			}

@@ -15,6 +15,7 @@
 
 	Route::controller('/reportes', 'ReportController');
 	Route::controller('/comercio', 'CommerceController');
+	Route::controller('/home', 'HomeController');
 	Route::controller('/', 'LoginController');
 	
 

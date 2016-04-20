@@ -32,7 +32,7 @@
 						<div class="small-12 medium-12 medium-centered large-12 large-centered columns">
 							<div class="row">
 								<div class="input-group">
-									<span class="input-group-label"><i><img src="vendor/img/iconreporte.png"/></i></span>
+									<span class="input-group-label"><i class="icon-iconreporte"></i></span>
 									{{	Form::select('', array(
 									'01' => 'REPORTE DE ACTIVIDADES',
 									'02' => 'REPORTE DE AFILIACIONES Y VISITAS',

@@ -93,10 +93,14 @@
 											<img id="imglogotoshow" src="{{$commerce->image }}"/>
 											<input id="logo" type="hidden">
 										</div>
-																			
+									<label style="padding-left: 50px; line-height: 1.2; font-size: 19px;">200X200</label>
 									<label for="fileupload" class="formbutton button ">Examinar</label>
 									<input id="fileupload"  type="file" name="logo-upload" class="show-for-sr">
-									<span class="form-error" style="font-size: 20px;"> El logotipo es requerido </span>	
+									<span class="form-error pics" style="font-size: 20px;"> El logotipo es requerido </span>	
+									<!-- The progress bar -->
+									<div class="success progress logo" hidden style="width: 150px">
+										<div id="logobar" class="progress-meter" style="width: 0%"></div>
+									</div>									
 								</div>
 								<div class="small-12 medium-6 large-6 large columns">
 									<label class="label-form">Tu imagen de portada: </label>	
@@ -104,14 +108,19 @@
 											<img id="imgportadatoshow" src="{{$commerce->banner}}"/>
 											<input id="portada" type="hidden">
 										</div>
+									<label style="padding-left: 90px; line-height: 1.2; font-size: 19px;">440X280</label>		
 									<label for="portada-upload" class="formbutton button ">Examinar</label>
 									<input id="portada-upload" type="file" name="portada-upload" class="show-for-sr">
-									<span class="form-error" style="font-size: 20px;"> El logotipo es requerido </span>																			
-								</div>  								
+									<span class="form-error pics" style="font-size: 20px;"> La portada es requerida </span>
+									<!-- The progress bar -->
+									<div class="success progress portada" hidden style="width: 150px;">
+										<div id="portadabar" class="progress-meter" style="width: 0%"></div>
+									</div>
+								</div>
   								<div class="small-12 medium-6 large-6 columns">
   									<label class="label-form ">Color para identificar a tu comercio:</label>								
   								</div>
-  								<div class="small-12 medium-6 large-6 columns" >									
+  								<div class="small-12 medium-6 large-6 columns">	
   									<select name="colorpicker-picker-longlist">
   									@foreach ($paletteColors as $key => $value)
   										@if($value->code == $colorCommerce)
@@ -163,30 +172,30 @@
 							</div>
 						</div>
 						<h4 style="float: left;  margin-right: 20px;" class="myfont small-12  medium-12  large-12 ">Permitenos identificarte en el mapa</h4>
-						<div class="row">							
+						<div class="row">
 							<fieldset class="gllpLatlonPicker">
 								<div class="small-12 medium-6 large-6 columns">
 									<div class="gllpMap">Google Maps</div>
 								</div>								
 								<div class="small-12 medium-6 large-6 columns">
-									<label class="label-form">Latitud:
-										<input id="latCom" data-validator="check-coords" required type="text" class="gllpLatitude"  value="{{$commerce->lat}}">
-										<span class="form-error" style="font-size: 20px;"> Campo requerido </span>
+									<input type="button" id="locatemeID" class="formbutton button "  value="Localizame!">
+									<input type="text" placeholder="Ingresa una ubicación" id="autocomplete-google"> 
+									<label hidden class="label-form">Latitud:
+										<input id="latCom" type="hidden" required type="text" class="gllpLatitude"  value="{{$commerce->lat}}">									
 									</label>
-									<label class="label-form">Longitud:
-										<input id="longCom" data-validator="check-coords" required type="text" class="gllpLongitude" value="{{$commerce->long}}">
-										<span class="form-error" style="font-size: 20px;"> Campo requerido </span>
+									<label hidden class="label-form">Longitud:
+										<input id="longCom" type="hidden" required type="text" class="gllpLongitude" value="{{$commerce->long}}">									
 									</label>
-									<input class="gllpZoom" value="11" type="hidden">
-									<input type="button" class="gllpUpdateButton formbutton button "  value="Actualizar mapa">
+									<input class="gllpZoom" value="12" type="hidden">
+									<input type="button" class="gllpUpdateButton" hidden>
 								</div>									
 							</fieldset>							
 						</div>
-						<div class="custom-panel-footer small-12 medium-12 large-12 columns">
-							<input id="updateCommerce" style="float: right;" type="submit" class="formbutton button"  value="Almacenar">
-							<input id="cancelCommerce" style="float: right; margin-right: 20px;" type="button" class="cancel button"  value="Cancelar">
-						</div>
 					</form>
+					<div class="custom-panel-footer small-12 medium-12 large-12 columns">
+						<input id="updateCommerce" style="float: right;" type="submit" class="formbutton button"  value="Almacenar">
+						<input id="cancelCommerce" style="float: right; margin-right: 20px;" type="button" class="cancel button"  value="Cancelar">
+					</div>					
 				</div>
 			</div>
 		</div>
@@ -196,7 +205,7 @@
 @section('addJs')
 	{{HTML::script('js/cmrce.js')}}
 	{{HTML::script('/vendor/plugins/colorpicker/jquery.simplecolorpicker.js')}}
-	{{HTML::script('http://maps.googleapis.com/maps/api/js?sensor=false')}}
+	{{HTML::script('http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false')}}
 	{{HTML::script('/vendor/plugins/locationpickergmaps/jquery-gmaps-latlon-picker.js')}}
 	{{HTML::script('vendor/plugins/resizecropcanvas/component.js')}}
 	{{HTML::script('vendor/plugins/canvasresize/canvasResize.js')}}

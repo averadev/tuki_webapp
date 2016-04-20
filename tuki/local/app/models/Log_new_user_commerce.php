@@ -22,7 +22,7 @@ class Log_new_user_commerce extends Eloquent
 			}
 			$data = self::select('dateAction')
 			->where('idCommerce','=',$idCommerce)
-			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 12:59:59'))
+			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 23:59:59'))
 			->count();
 			 $items[$count++] = $data;
 		}
@@ -36,7 +36,7 @@ class Log_new_user_commerce extends Eloquent
 		$to   = Carbon::parse($to);
 		$check =  Carbon::parse($from)->format('d-m-Y H:i:s');
 		$dailyData = $this->select(DB::raw("date_format((dateAction),'%d-%m-%Y') as date"), DB::raw('count(*) as afiliations'))
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->groupBy('dateAction')
 		->orderBy('dateAction','ASC')
@@ -51,7 +51,7 @@ class Log_new_user_commerce extends Eloquent
 		$to   = Carbon::parse($to);
 		$check =  Carbon::parse($from)->format('d-m-Y H:i:s');
 		$dailyData = $this->select(DB::raw("date_format((dateAction),'%d-%m-%Y') as date"), DB::raw('count(*) as afiliations'))
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->groupBy('dateAction')
 		->orderBy('dateAction','ASC')
@@ -64,7 +64,7 @@ class Log_new_user_commerce extends Eloquent
 		$from = Carbon::parse($from);
 		$to = $from->copy()->lastOfMonth()->format('Y-m-d');
 		$dailyData = self::select('idUser')
-		->whereBetween('dateAction',[$from, $to.' 12:59:59'])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
 		->count();
@@ -75,9 +75,9 @@ class Log_new_user_commerce extends Eloquent
 		$first = date('Y-'.$month.'-01');
 		$first = Carbon::parse($first);
 		$from = $first->copy()->subMonth();
-		$to = $from->copy()->lastOfMonth()->addHours(13);
+		$to = $from->copy()->lastOfMonth();
 		$dailyData = self::select('idUser')
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
 		->count();
@@ -96,7 +96,7 @@ class Log_new_user_commerce extends Eloquent
 			$to = $to->format('Y-m-'.$currentDay.'');
 		}
 		$dailyData = self::select('idUser')
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
 		->count();
@@ -122,7 +122,7 @@ class Log_new_user_commerce extends Eloquent
 			$toComp = $fromComp;
 		}
 		$dailyData = $this->select('dateAction as date', DB::raw('count(*) as afiliations'))
-		->whereBetween('dateAction',[$fromComp, $toComp->addHours(13)])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($fromComp,$toComp))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->orderBy('dateAction','ASC')
 		->get();
@@ -134,9 +134,9 @@ class Log_new_user_commerce extends Eloquent
 
 	public function getTotalUsersByPeriod($data){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
-		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)))).' 12:59:59';
+		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate))));
 		$dailyData = self::select('idUser')
-		->whereBetween('dateAction',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
 		->count();

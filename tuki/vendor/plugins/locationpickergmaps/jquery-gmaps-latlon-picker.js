@@ -24,6 +24,10 @@ $.fn.gMapsLatLonPicker = (function() {
 
 	var _self = this;
 
+	var input = document.getElementById('autocomplete-google');
+	var autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete.bindTo('bounds', _self);	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// PARAMETERS (MODIFY THIS PART) //////////////////////////////////////////////////////////////
 	_self.params = {
@@ -40,7 +44,7 @@ $.fn.gMapsLatLonPicker = (function() {
 			streetViewControl: false
 		},
 		strings : {
-			markerText : "Drag this Marker",
+			markerText : "Doble click para ubicar a tu comercio",
 			error_empty_field : "Couldn't find coordinates for this place",
 			error_no_results : "Couldn't find coordinates for this place"
 		}
@@ -160,8 +164,8 @@ $.fn.gMapsLatLonPicker = (function() {
 			_self.vars.cssID = "#" + _self.vars.ID + " ";
 
 			_self.params.defLat  = $(_self.vars.cssID + ".gllpLatitude").val()  ? $(_self.vars.cssID + ".gllpLatitude").val()		: _self.params.defLat;
-			_self.params.defLng  = $(_self.vars.cssID + ".gllpLongitude").val() ? $(_self.vars.cssID + ".gllpLongitude").val()	    : _self.params.defLng;
-			_self.params.defZoom = $(_self.vars.cssID + ".gllpZoom").val()      ? parseInt($(_self.vars.cssID + ".gllpZoom").val()) : _self.params.defZoom;
+			_self.params.defLng  = $(_self.vars.cssID + ".gllpLongitude").val() ? $(_self.vars.cssID + ".gllpLongitude").val()		: _self.params.defLng;
+			_self.params.defZoom = $(_self.vars.cssID + ".gllpZoom").val()	  ? parseInt($(_self.vars.cssID + ".gllpZoom").val()) : _self.params.defZoom;
 
 			_self.vars.LATLNG = new google.maps.LatLng(_self.params.defLat, _self.params.defLng);
 
@@ -170,6 +174,25 @@ $.fn.gMapsLatLonPicker = (function() {
 			_self.vars.MAPOPTIONS.center = _self.vars.LATLNG;
 
 			_self.vars.map = new google.maps.Map($(_self.vars.cssID + ".gllpMap").get(0), _self.vars.MAPOPTIONS);
+			
+			// Set autocomplete place finder input
+
+			_self.vars.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+			autocomplete.addListener('place_changed', function() {
+				var place = autocomplete.getPlace();
+				if (!place.geometry) {
+					return;
+				}
+				if (place.geometry.viewport) {
+				  _self.vars.map.fitBounds(place.geometry.viewport);
+				} else {
+				  _self.vars.map.setCenter(place.geometry.location);
+				  _self.vars.map.setZoom(17);
+				}				
+			});			
+			
+			
 			_self.vars.geocoder = new google.maps.Geocoder();
 			_self.vars.elevator = new google.maps.ElevationService();
 
@@ -179,6 +202,9 @@ $.fn.gMapsLatLonPicker = (function() {
 				title: _self.params.strings.markerText,
 				draggable: true
 			});
+			
+
+			
 
 			// Set position on doubleclick
 			google.maps.event.addListener(_self.vars.map, 'dblclick', function(event) {
@@ -239,5 +265,5 @@ $(document).ready( function() {
 });
 
 $(document).bind("location_changed", function(event, object) {
-	console.log("changed: " + $(object).attr('id') );
+	//console.log("changed: " + $(object).attr('id') );
 });

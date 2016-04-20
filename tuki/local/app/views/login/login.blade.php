@@ -134,10 +134,10 @@
 		<div class="small-12 small-centered medium-6 medium-centered large-6 large-centered columns loginmaindiv">
 			<div class="login-panel">
 				<div class="row">
-					<div class="small-6 medium-6 large-6 columns">
+					<div class="small-12 medium-6 large-6 columns">
 						<img style="" class="large-12 columns iconpic" src="vendor/login/icono.png" alt="tuki" />
 					</div>
-					<div  class="login-box small-6 medium-6 large-6 columns">
+					<div  class="login-box small-12 medium-6 large-6 columns">
 						<div class="row">
 							<div class="small-12 medium-12 columns large-12 columns">
 								<div class="row">								

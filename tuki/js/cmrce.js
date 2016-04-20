@@ -40,11 +40,15 @@ var cmrce = function (){
 			}			
 		});
 
+		$('#locatemeID').click(function(event) {
+			event.preventDefault();
+			getLocation();
+		});
+
 		$('#cancelCommerce').click(function(event) {
 			event.preventDefault();
 			window.location.href=HOST;
 		});
-
 
 		$('#updateCommerce').click(function(event) {
 			event.preventDefault();
@@ -77,7 +81,7 @@ var cmrce = function (){
 			crop_canvas.width = width;
 			crop_canvas.height = height;
 			
-			crop_canvas.getContext('2d').drawImage(img, left+2, top+1, width, height, 0, 0, width, height);
+			crop_canvas.getContext('2d').drawImage(img, left+2, top+2, width, height, 0, 0, width, height);
 			$("#imglogotoshow").attr("src",crop_canvas.toDataURL("image/png"));
 			$("#logo").val(crop_canvas.toDataURL("image/png"));
 			$('#modal-logo').foundation('close');
@@ -108,16 +112,22 @@ var cmrce = function (){
 			canvasResize(file, {
 				width: 440,
 				height: 280,
+				progressbar : $('#portadabar'),
 				crop: false,
 				quality: 100,
 				//rotate: 90,
-				callback: function(data, width, height) {
-					var newComponent = 	"<div class='overlay portada'><div class='overlay-inner'></div></div><img id='imgportada' src=''/>";
-					$("#modal-portada .component").empty();
-					$('#modal-portada .component').append(newComponent);
-					$("#imgportada").attr("src", data);
-					resizeableImage($('#imgportada'));	
-					$('#modal-portada').foundation('open');
+				callback: function(data, width, height,sameSize) {
+					if(!sameSize){					
+						var newComponent = 	"<div class='overlay portada'><div class='overlay-inner'></div></div><img id='imgportada' src=''/>";
+						$("#modal-portada .component").empty();
+						$('#modal-portada .component').append(newComponent);
+						$("#imgportada").attr("src", data);
+						resizeableImage($('#imgportada'));	
+						$('#modal-portada').foundation('open');
+					}else{
+						$("#imgportadatoshow").attr("src", data);
+						$("#portada").val(data);
+					}
 				}
 			});
 		});	
@@ -126,22 +136,29 @@ var cmrce = function (){
 			canvasResize(file, {
 				width: 200,
 				height: 200,
+				progressbar : $('#logobar'),
 				crop: false,
 				quality: 100,
 				//rotate: 90,
-				callback: function(data, width, height) {
-					var newComponent = 	"<div class='overlay'><div class='overlay-inner'></div></div><img id='imglogo' src=''/>";
-					$("#modal-logo .component").empty();
-					$('#modal-logo .component').append(newComponent);
-					$("#imglogo").attr("src", data);
-					resizeableImage($('#imglogo'));	
-					$('#modal-logo').foundation('open');
+				callback: function(data, width, height,sameSize) {
+					if(!sameSize){
+						var newComponent = 	"<div class='overlay'><div class='overlay-inner'></div></div><img id='imglogo' src=''/>";
+						$("#modal-logo .component").empty();
+						$('#modal-logo .component').append(newComponent);
+						$("#imglogo").attr("src", data);
+						resizeableImage($('#imglogo'));	
+						$('#modal-logo').foundation('open');						
+					}else{
+						$("#imglogotoshow").attr("src", data);
+						$("#logo").val(data);
+					}
 				}
 			});
 		});
 	}
 	/*AJAX REQUESTS*/
 	var sendData = function (form){
+		$('#updateCommerce').attr('disabled', true);	
 		$.ajax({
 			type: "POST",
 			dataType: "json", 
@@ -159,8 +176,10 @@ var cmrce = function (){
 				showPanelAlert(response.msg);
 			}
 		}).fail(function() {
+		}).always(function() {
+		$('#updateCommerce').removeAttr('disabled');
 		});
-	}
+	}	
 
 	var validation = function(){
 		Foundation.Abide.defaults.patterns['dashes_only'] = /^[0-9-]*$/;
@@ -199,6 +218,24 @@ var cmrce = function (){
 	
 	/*OTROS METODOS*/	
 
+	/*GOOGLE MAPS*/
+	var showPosition = function(position) {
+		var latlon = position.coords.latitude + "," + position.coords.longitude;
+		$('#latCom').val(position.coords.latitude);
+		$('#longCom').val(position.coords.longitude);
+		var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		$(".gllpUpdateButton").trigger( "click" );
+		//var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+		//+latlon+"&zoom=14&size=400x300&sensor=false";
+		//document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+	}
+	var getLocation =  function () {		
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		} else {
+			error('Geo Location is not supported');
+		}
+	}		
 
 	var onloadExec = function(){
 	 	$form    = $('#addCommerce');		

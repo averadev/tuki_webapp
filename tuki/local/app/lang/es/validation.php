@@ -81,15 +81,16 @@ return array(
     "same"                 => ":attribute y :other deben coincidir.",
     "schedule"             => "El campo solo debe contener letras, numeros and guion medio.",
     "size"             => array(
-        "numeric" => "El tamaño de debe ser :size.",
-        "file"    => "El tamaño de debe ser :size kilobytes.",
-        "string"  => "Debe contener :size caracteres.",
-        "array"   => "Debe contener :size elementos.",
+        "numeric"      => "El tamaño de debe ser :size.",
+        "file"         => "El tamaño de debe ser :size kilobytes.",
+        "string"       => "Debe contener :size caracteres.",
+        "array"        => "Debe contener :size elementos.",
     ),
-    "unique"           => "Ya ha sido registrado.",
-    "url"              => "El formato es inválido.",
-    "timezone"         => "El debe ser una zona válida.",
-    "time_with_meridian" => "El formato es inválido.",
+    "unique"                => "Ya ha sido registrado.",
+    "longitud_latitud"      => "El formato no es correcto.",    
+    "url"                   => "El formato es inválido.",
+    "timezone"              => "El debe ser una zona válida.",
+    "time_with_meridian"    => "El formato es inválido.",
 
     /*
     |--------------------------------------------------------------------------

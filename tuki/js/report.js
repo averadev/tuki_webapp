@@ -32,7 +32,7 @@ var report = function() {
 			}
 		});
 
-		$('#make-report').click(function(event) {
+		$('#make-report').click(function(event){
 			if(getInputsReport() !== 0){
 				$("#divSubmitExcel").hide();
 				getDataReport(getInputsReport());
@@ -40,6 +40,7 @@ var report = function() {
 		});			
 	}
 	var getDataReport = function (inputs){
+		$('#make-report').attr('disabled', true);	
 		$.ajax({
 			url: HOST+'/reportes/report',
 			type: 'GET',
@@ -47,7 +48,6 @@ var report = function() {
 			data: inputs,
 		}).done(function(response) {
 			if(response.report){
-				console.log(response);
 				if(response.report == 1){ /*Report de Actividades*/
 					if(response.totalCheckIns > 0 || response.totalUsers > 0 || response.dataRedemption.length > 0){
 						var avgVisitClient = Math.ceil((response.totalCheckIns/response.totalUsers));
@@ -177,7 +177,10 @@ var report = function() {
 				} /*END Reporte de Redenciones*/
 			}/* response.report	*/
 		}).fail(function(response) {
-		});	
+		}).always(function() {
+			$('#make-report').removeAttr('disabled');
+		});
+				
 	}
 	var makeReportExcel = function (inputs){
 		$.ajax({

@@ -61,7 +61,7 @@ var home = function (){
 
 	var getDataChar = function(data){
 		$.ajax({
-			url: HOST+'/make-charts',
+			url: HOST+'/home/make-charts',
 			type: 'GET',
 			dataType: 'json',
 			data: data,
@@ -136,7 +136,7 @@ var home = function (){
         }
         $('#lastMonthTotal').text(response.dataPercents.totalLastMonthCheckIns);
         $('#crecimiento').text(crecimiento);
-        $('#creRelativo').text(crecimiento);		
+        $('#creRelativo').text(crecimientoRel);		
 	}
 	var getPorcentPeriod = function(numerador,denominador){
 		var porcent = (numerador-denominador);

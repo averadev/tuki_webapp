@@ -36,7 +36,7 @@ var resizeableImage = function(image_target) {
     e.preventDefault();
     e.stopPropagation();
     saveEventState(e);
-    $(document).on('mousemove touchmove', resizing);
+   // $(document).on('mousemove touchmove', resizing);
     $(document).on('mouseup touchend', endResize);
   };
 

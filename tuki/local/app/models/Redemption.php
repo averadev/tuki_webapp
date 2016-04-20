@@ -20,7 +20,7 @@ class Redemption extends Eloquent
 			}
 			$data = self::select('dateRedemption')
 			->where('idCommerce','=',$idCommerce)
-			->whereBetween('dateRedemption',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 12:59:59'))
+			->whereBetween('dateRedemption',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 23:59:59'))
 			->count();
 			 $items[$count++] = $data;
 		}
@@ -31,13 +31,13 @@ class Redemption extends Eloquent
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
 		$from = Carbon::parse($from);
-		$to   = Carbon::parse($to)->addHours(13);
+		$to   = Carbon::parse($to);
 
 		$dailydata = $this->select(DB::raw('rwrd.name,count(*) as redemptions'))
 		->join('reward as rwrd','rwrd.id','=','idReward')
 		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
 		->where('redemption.status','!=','3')
-		->whereBetween('dateRedemption',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->groupBy('idReward')
 		->get();
 		return $dailydata;
@@ -47,12 +47,12 @@ class Redemption extends Eloquent
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
 		$from = Carbon::parse($from);
-		$to   = Carbon::parse($to)->addHours(13);
+		$to   = Carbon::parse($to);
 		$dailydata = $this->select(DB::raw('rwrd.name,count(*) as redemptions'))
 		->join('reward as rwrd','rwrd.id','=','idReward')
 		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
 		->where('redemption.status','=','1')
-		->whereBetween('dateRedemption',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->groupBy('idReward')
 		->get();
 		return $dailydata;
@@ -63,7 +63,7 @@ class Redemption extends Eloquent
 		$from = Carbon::parse($from);
 		$to = $from->copy()->lastOfMonth()->format('Y-m-d');
 		$dailyData = self::select('idUser')
-		->whereBetween('dateRedemption',[$from, $to.' 12:59:59'])
+		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
@@ -75,9 +75,9 @@ class Redemption extends Eloquent
 		$first = date('Y-'.$month.'-01');
 		$first = Carbon::parse($first);
 		$from = $first->copy()->subMonth();
-		$to = $from->copy()->lastOfMonth()->addHours(13);
+		$to = $from->copy()->lastOfMonth();
 		$dailyData = self::select('idUser')
-		->whereBetween('dateRedemption',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
@@ -97,7 +97,7 @@ class Redemption extends Eloquent
 			$to = $to->format('Y-m-'.$currentDay.'');
 		}
 		$dailyData = self::select('idUser')
-		->whereBetween('dateRedemption',[$from, $to])
+		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
 		->get()
@@ -124,7 +124,7 @@ class Redemption extends Eloquent
 			$toComp = $fromComp;
 		}
 		$dailyData = $this->select('dateRedemption as date', DB::raw('count(*) as redemptions'))
-		->whereBetween('redemption.dateRedemption',[$fromComp, $toComp->addHours(13)])
+		->whereBetween(DB::raw('DATE(redemption.dateRedemption)'), array($fromComp,$toComp))
 		->join('reward as rwrd','rwrd.id','=','idReward')	
 		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
 		->where('redemption.status','!=','3')		

@@ -3,32 +3,25 @@
 class CommerceController extends BaseController {
 	/*
 	|--------------------------------------------------------------------------
-	| Controlador para el login
+	| Controlador para el comercio
 	|--------------------------------------------------------------------------
 	|
 	*/
+	function __construct(){
+		$this->beforeFilter('auth');
+		$this->beforeFilter('csrf',array('except' => array('getIndex')));
+	}	
 	public function getIndex(){
-		if(Auth::check()){
-			$commerce = new Commerce;
-			$palette = new Palette;
-			$paletteColors = $palette->getMyPaletteColors();
-			$dataCommerce = $commerce->geyMyCommerce();
-			$colorCommerce = array($dataCommerce->colorR,$dataCommerce->colorG,$dataCommerce->colorB);
-			$hexcodeColor =  Helper::rgb2hex($colorCommerce);
-			return View::make('commerce.commerce')
-			->with('commerce',$dataCommerce)
-			->with('colorCommerce',$hexcodeColor)
-			->with('paletteColors',$paletteColors);
-		}
-		return View::make('login.login');
-	}
-
-	public function getStoredPics(){
-		return View::make('commerce.trama');
-	}
-
-	public function postStoredPics(){
-		return View::make('commerce.trama');
+		$commerce = new Commerce;
+		$palette = new Palette;
+		$paletteColors = $palette->getMyPaletteColors();
+		$dataCommerce = $commerce->geyMyCommerce();
+		$colorCommerce = array($dataCommerce->colorR,$dataCommerce->colorG,$dataCommerce->colorB);
+		$hexcodeColor =  Helper::rgb2hex($colorCommerce);
+		return View::make('commerce.commerce')
+		->with('commerce',$dataCommerce)
+		->with('colorCommerce',$hexcodeColor)
+		->with('paletteColors',$paletteColors);
 	}
 
 	public function postStoreCommerce(){
@@ -52,8 +45,8 @@ class CommerceController extends BaseController {
 				'description' 	=> 'required',
 				'color' 		=> 'required',
 				'address' 		=> 'required',
-				'lat' 			=> 'required',
-				'long' 			=> 'required'
+				'lat' 			=> 'required|longitud_latitud',
+				'long' 			=> 'required|longitud_latitud'
 			];
 			$commerce = new Commerce;
 			$logoExist = $commerce->checkLogo();

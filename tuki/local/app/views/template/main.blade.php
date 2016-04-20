@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		{{ HTML::style('vendor/css/foundation.min.css') }}
 		{{ HTML::style('vendor/css/flaticons/flaticon.css') }}
+		{{ HTML::style('vendor/css/icon_moon/style.css') }}
 		{{ HTML::style('css/your_style.css') }}
 		@yield('addCss')
 		<style type="text/css">
@@ -47,6 +48,10 @@
 			<script type="text/javascript">
 				    $(document).foundation();
 				    var HOST = "{{URL::to('/')}}";
+					$.ajaxSetup({
+						headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+					});
+
 			</script>
 		{{HTML::script('js/global.js')}}
 		@yield('addJs')
