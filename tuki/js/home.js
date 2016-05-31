@@ -21,13 +21,10 @@ var home = function (){
 		$("#comercio").click(function(event){
 			event.preventDefault();
 			window.location.href=HOST+"/comercio";
-			//var popup = new Foundation.Reveal($('#messageTuki'));
-			//popup.open();
 		});
 		$('#recompensas').click(function(event) {
 			event.preventDefault();
-			var popup = new Foundation.Reveal($('#messageTuki'));
-			popup.open();
+			window.location.href=HOST+"/recompensas";
 		});	
 		$('#month-chart').on('change', function() {
 			$("#porcents").hide();
@@ -37,7 +34,6 @@ var home = function (){
 
 	var sendDataChar = function(){
 		var selectedMonth = $("#month-chart option:selected").val();
-		var commerce 	  = $('#panelgraph').attr("data-commerce"); 
 		var chart = null;
 		if($('#panel1v').hasClass('is-active') ){
 			$('#panel1v').empty();
@@ -52,7 +48,6 @@ var home = function (){
 			chart  = 3;
 		}
 		data = {
-			commerce: commerce,
 			month: selectedMonth,
 			chart: chart
 		};
@@ -82,13 +77,13 @@ var home = function (){
         			$('#panel3v').append('<canvas id="canvasRedemp" height="109"></canvas>');
         			makepercents(response);
 				}
-				printChar(response.data,response.chart);
+				printChar(response.data,response.chart,response.dataPercents);
 				$("#porcents").show();
 			}
 		}).fail(function(response) {
 		});	
 	}
-	var printChar = function(data,chart){
+	var printChar = function(data,chart,totalsmonth){
 		var currentyear = new Date().getFullYear();
 		var barChartData = {
 			labels : ["1-5","6-10","11-15","16-20","21-25","26-"+getDaysInMonth($("#month-chart option:selected").val(),currentyear)],
@@ -105,16 +100,20 @@ var home = function (){
 		}
 		if(chart == 1){
 			var ctx = $('#canvasCommerce').get(0).getContext("2d");
+			$("#monthTotal").text("Total mes seleccionado: "+totalsmonth.totalCurrentMonthCheckIns+" afiliados.");
 		}
 		if(chart ==2){
 			var ctx = $('#canvasCheck').get(0).getContext("2d");
+			$("#monthTotal").text("Total mes seleccionado: "+totalsmonth.totalCurrentMonthCheckIns+" visitas.");
 		}
 		if(chart == 3){
-			var ctx = $('#canvasRedemp').get(0).getContext("2d");	
+			var ctx = $('#canvasRedemp').get(0).getContext("2d");
+			$("#monthTotal").text("Total mes seleccionado: "+totalsmonth.totalCurrentMonthCheckIns+" redenciones.");	
 		}
 		var myNewChart = new Chart(ctx).Bar(barChartData, {
 			responsive : true
-		});		
+		});
+		
 	}
 	var getDaysInMonth = function(month,year) {
  		return new Date(year, month, 0).getDate();

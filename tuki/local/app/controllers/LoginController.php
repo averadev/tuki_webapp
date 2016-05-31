@@ -10,15 +10,10 @@ class LoginController extends BaseController {
 
 	public function getIndex(){
 		if(Auth::check()){
-			$id = Auth::id();
-			$data = Commerce::find($id);
-			$dataCommerce = new stdClass();
-			$dataCommerce->id = $data->id;
-			$dataCommerce->image = $data->image;
-			$dataCommerce->name = $data->name;
+			$dataCommerce = Commerce::getCommerceID();
 			$now = new DateTime();
   			$month = $now->format('n');		
-			$dataChart = json_encode(Log_new_user_commerce::getDataByMonth($data,'03'));					
+			$dataChart = json_encode(Log_new_user_commerce::getDataByMonthNewUser('03'));		
 			return View::make('welcome.home')
 			->with('commerce',$dataCommerce)
 			->with('chartcom',$dataChart)

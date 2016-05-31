@@ -1,7 +1,7 @@
 <?php
 /**
 * 
-MODELO PARA NUEVOS USUARIOS
+	MODELO PARA NUEVOS USUARIOS
 */
 use Carbon\Carbon;
 class Log_new_user_commerce extends Eloquent
@@ -10,7 +10,7 @@ class Log_new_user_commerce extends Eloquent
 	protected $table = "log_new_user_commerce";
 	protected $SoftDelete = false;
 	
-	public static function getDataByMonth($idCommerce,$month){
+	public static function getDataByMonthNewUser($month){
 		$month = (string)$month;
 		$count=0;
 		$items = array();
@@ -21,14 +21,14 @@ class Log_new_user_commerce extends Eloquent
 				$end = 5;
 			}
 			$data = self::select('dateAction')
-			->where('idCommerce','=',$idCommerce)
+			->where('idCommerce','=',Commerce::getCommerceID()->id)
 			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 23:59:59'))
 			->count();
 			 $items[$count++] = $data;
 		}
 		return $items;
 	}
-
+	/*Obtiene un arreglo con el numero de total de afiliados por cada dia en un rango de fechas*/
 	public function getNewUserReportByPeriod($data){  
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
@@ -38,8 +38,8 @@ class Log_new_user_commerce extends Eloquent
 		$dailyData = $this->select(DB::raw("date_format((dateAction),'%d-%m-%Y') as date"), DB::raw('count(*) as afiliations'))
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
 		->where('idCommerce','=',Commerce::getCommerceID()->id)
-		->groupBy('dateAction')
-		->orderBy('dateAction','ASC')
+		->groupBy('date')
+		->orderBy('date','ASC')
 		->get();
 	  	return $dailyData;
 	}
@@ -132,6 +132,8 @@ class Log_new_user_commerce extends Eloquent
 		return $dailyData[0];
 	}
 
+
+	/*Obtiene el numero total de nuevos usuarios en un periodo seleccionado, ex 100 usuarios nuevos*/
 	public function getTotalUsersByPeriod($data){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate))));

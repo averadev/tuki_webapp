@@ -1,6 +1,6 @@
 <?php
 /**
-* Clase para identificar los colores que identifican al comercio
+* Clase para los colores que identifican al comercio
 */
 class Palette extends Eloquent
 {
@@ -9,7 +9,7 @@ class Palette extends Eloquent
 
 	public function getMyPaletteColors(){		
 		$data = [];
-		$colors = self::select('id','name','colorA1 as R','colorA2 as G','colorA3 as B')
+		$colors = self::select('id','name','bg1 as R','bg2 as G','bg3 as B')
 				->get();
 		foreach ($colors as $key => $value) {
 			$hexColors = new stdClass();

@@ -11,4 +11,5 @@ return array(
     '3919eeb97e98d4648304477f8ef734ba' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
     'a0edc8309cc5e1d60e3047b5df6b7052' => $vendorDir . '/guzzlehttp/psr7/src/functions_include.php',
     '58571171fd5812e6e447dce228f52f4d' => $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
+    '9c6edb95b3e12cc2bf621f83c93d0e4f' => $vendorDir . '/efficiently/authority-controller/src/Efficiently/AuthorityController/helpers.php',
 );

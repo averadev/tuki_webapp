@@ -40,11 +40,12 @@
 		<link rel="shortcut icon" href="{{ URL::to('/') }}/vendor/img/favicon/favicon.ico" type="image/x-icon">
 		@yield('addCss')	
 	</head>
-	<body>
+	<body class="content-color">
 		@include('template.header')
 		@yield('content')
 			<script src="{{ URL::asset('vendor/js/foundation/jquery.min.js') }}"></script>	
 			<script src="{{ URL::asset('vendor/js/foundation/foundation.min.js') }}"></script>
+			<script src="{{ URL::asset('vendor/plugins/showmessages/showmessages.js') }}"></script>
 			<script type="text/javascript">
 				    $(document).foundation();
 				    var HOST = "{{URL::to('/')}}";

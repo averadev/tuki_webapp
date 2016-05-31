@@ -25,9 +25,9 @@ class ReportController extends BaseController {
 				'endDate'    => trim(Input::get('endDate'))
 			];
 			$rules = [
-				'reportType' =>	'required',
-				'startDate'  => 'required',
-				'endDate'    => 'required'
+				'reportType' =>	'required|min:1|max:10|size:2',
+				'startDate'  => 'required|date_format:"d/m/Y"',
+				'endDate'    => 'required|date_format:"d/m/Y"'
 			];
 			$validator = Validator::make($data,$rules);	
 			if( $validator->passes()){
@@ -45,8 +45,13 @@ class ReportController extends BaseController {
 					$checkIn  		= new Log_user_checkin;
 					$dataComp 	 	= $newUser->compareOneMonth($data);
 					$dataCompViews 	= $checkIn->compareOneMonth($data);
-					$mainReport 	= $this->makeReport($data);
-					return Response::json(array('report' => 2,'dataCommerce' => $mainReport,'dataComp' => $dataComp,'dataCompViews' => $dataCompViews),200);				
+					//$mainReport 	= $this->makeReport($data);
+					$totalVisitsByPeriod = $checkIn->getCheckInReportByPeriod($data); /*Numero total visitas en el periodo*/
+					$totalUsersByPeriod	 = $newUser->getNewUserReportByPeriod($data);	  /*Numero total usuarios registrados en el periodo */
+
+					$totalNewUsersAndVisits = $this->combineReport($totalUsersByPeriod->toArray(),$totalVisitsByPeriod->toArray(),$data); /*Combina los reportes de visitas y nuevos usuarios*/
+
+					return Response::json(array('report' => 2,'dataCommerce' => $totalNewUsersAndVisits,'dataComp' => $dataComp,'dataCompViews' => $dataCompViews),200);				
 				}elseif ($data->reportType == '03') { /*Reporte de redenciones*/
 					$redemption 		= new Redemption;
 					$mainReport 		 = $redemption->getDataByPeriod($data);
@@ -68,6 +73,7 @@ class ReportController extends BaseController {
 		return $report;
 	}
 
+	/*Exporta los reportes en Excel*/
 	public function getMakeExcel(){
 		$data = [
 			'reportType' => trim(Input::get('reportType')),
@@ -75,9 +81,9 @@ class ReportController extends BaseController {
 			'endDate'    => trim(Input::get('endDate'))
 		];
 		$rules = [
-			'reportType' =>	'required',
-			'startDate'  => 'required',
-			'endDate'    => 'required'
+			'reportType' =>	'required|min:1|max:10|size:2',
+			'startDate'  => 'required|date_format:"d/m/Y"',
+			'endDate'    => 'required|date_format:"d/m/Y"',
 		];
 		$validator = Validator::make($data,$rules);	
 			$data  = (object)$data;
@@ -94,58 +100,47 @@ class ReportController extends BaseController {
 		}
 	}
 
+	/*Combina el reporte de afiliaciones con el de visitas*/
 	private function combineReport($newUserReport,$ReportCheckIn,$period){
-		//$from = date('Y-m-d',strtotime(str_replace('/', '-', $period->startDate)));
-		//$to   = date('Y-m-d',strtotime(str_replace('/', '-', $period->endDate)));
-		//$from = Carbon::parse($from);
-		//$to   = Carbon::parse($to);
-		$data = array();
-		//$interval = DateInterval::createFromDateString('1 day');
-		//$period = new DatePeriod($from, $interval, $to);
-		$equaldate = false;
-		
-			foreach ($newUserReport as $new_user) {
-				foreach ($ReportCheckIn as $check_in) {
-					if($check_in->date == $new_user->date){
-						$report = new stdClass();
-						$report->date			= $new_user->date;
-						$report->afiliations	= $new_user->afiliations;
-						$report->views			= $check_in->views;
-						array_push($data, $report);
-					}
-				}			
-				
-				//if( $dt->toDateString() == $new_user->date  ){
-				//	$report = new stdClass();
-				//	$report->dateafiliation = $dt->toDateString();
-				//	$report->afiliation = $new_user->afiliations;
-				//	array_push($data, $report);	
-				//}
-			}
-
-			return $data;
-
-			//foreach ($ReportCheckIn as $key => $Checkin) {
-			//	if( $dt->toDateString() == $Checkin->date ){	
-			//		$report = new stdClass();
-			//		$report->dateview = $dt->toDateString();
-			//		$report->view = $Checkin->views;
-			//		array_push($data, $report);		
-			//	}
-			//return  $data;
+		$data = array_merge($newUserReport,$ReportCheckIn);
+		$tmp = [];			
+		foreach ($data as $val) {
+			$tmp[$val['date']] = array_merge(
+				isset($tmp[$val['date']]) ? $tmp[$val['date']] : [],
+				$val
+			);
 		}
+		$result = array_values($tmp);
+		foreach ($result as $key => $value) {
+			if (!(array_key_exists("afiliations",$value)))
+			{
+				$temp = $result[$key]["views"];
+				unset($result[$key]["views"]);
+				$result[$key]["afiliations"] = 0;
+				$result[$key]["views"] = $temp;
+				
+			}
+			if (!(array_key_exists("views",$value)))
+			{
+				$result[$key]["views"] = 0;
+			}
+		}
+		function sortFunction( $a, $b ) {
+			return strtotime($a["date"]) - strtotime($b["date"]);
+		}
+		usort($result, "sortFunction");
+		return  $result;
 
-
-
-
+	}
+	
 	/*METODOS PARA GENERAR LOS REPORTES EN EXCEL*/
 
 	/*BEGIN REPORTE DE ACTIVIDADES*/
 
 	private function makeActivitiesReport($data){
 		$startSelectedPeriod = $this->makeDateWithMonthNames($data->startDate);
- 		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
- 		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;
+		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
+		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;
 		$redemption 	= new Redemption;
 		$userCheckIn 	= new Log_user_checkin;
 		$newUser  		= new Log_new_user_commerce;
@@ -170,9 +165,9 @@ class ReportController extends BaseController {
 			$avgVisitClient =ceil($totalCheckIns/$totalUsers);
 		}
 		Excel::create('reporte-actividades', function($excel) use($arrayReport,$totalRows,$totalRedemptions,$totalCheckIns,$totalUsers,$recVisit,$avgVisitClient,$selectedPeriod) {
-  			$excel->sheet('Actividades', function($sheet) use($arrayReport,$totalRows,$totalRedemptions,$totalCheckIns,$totalUsers,$recVisit,$avgVisitClient,$selectedPeriod) {  							
-  				$sheet->rows(array(
-  					array('Recompensa','Total','% Total')
+			$excel->sheet('Actividades', function($sheet) use($arrayReport,$totalRows,$totalRedemptions,$totalCheckIns,$totalUsers,$recVisit,$avgVisitClient,$selectedPeriod) {  							
+				$sheet->rows(array(
+					array('Recompensa','Total','% Total')
 				));
 				$sheet->rows($arrayReport);
 				$sheet->rows(array(
@@ -185,28 +180,28 @@ class ReportController extends BaseController {
 				$totalRows+=2;
 				$sheet->cells('A1:C1', function($cells) {		
 					$cells->setFont(array(
-    					'size' => '13',
-    					'bold' =>  true
+						'size' => '13',
+						'bold' =>  true
 					));				
 				});
 				$sheet->cells('B1:C1', function($cells) {
 					$cells->setAlignment('right');			
 					$cells->setFont(array(
-    					'size' => '13',
-    					'bold' =>  true
+						'size' => '13',
+						'bold' =>  true
 					));				
 				});				
 				$sheet->cells('C1:C'.($totalRows).'', function($cells) {/*Alinear columna %total a la derecha*/
 					$cells->setAlignment('right');
 				});
 				 $sheet->rows(array(
-  					array(''),
-  					array(''),
-  					array('Periodo seleccionado: ',$selectedPeriod),
-  					array('Total de visitas registradas: ',$totalCheckIns),
-  					array('Total de nuevos clientes: ',$totalUsers),
-  					array('Recompensas por visitas: ',$recVisit),
-  					array('Visitas promedio por cliente: ',$avgVisitClient)
+					array(''),
+					array(''),
+					array('Periodo seleccionado: ',$selectedPeriod),
+					array('Total de visitas registradas: ',$totalCheckIns),
+					array('Total de nuevos clientes: ',$totalUsers),
+					array('Recompensas por visitas: ',$recVisit),
+					array('Visitas promedio por cliente: ',$avgVisitClient)
 				));
 				$startResults = $totalRows+3;
 				$sheet->mergeCells('B'.$startResults.':D'.$startResults.'');  /*merge the cells to fit the date period*/
@@ -225,11 +220,11 @@ class ReportController extends BaseController {
 				});
 				$sheet->cells('A'.$startResults.':A'.$endResults.'', function($cells) {			
 					$cells->setFont(array(
-    					'size'       => '12',
-    					'bold'       =>  true
+						'size'       => '12',
+						'bold'       =>  true
 					));				
 				});
-    		});
+			});
 		})->export('xls');
 	}
 
@@ -237,8 +232,8 @@ class ReportController extends BaseController {
 
 	private function makeCheckInAndNewUsersReport($data){
 		$startSelectedPeriod = $this->makeDateWithMonthNames($data->startDate);
- 		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
- 		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;		
+		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
+		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;		
 		$newUser  		= new Log_new_user_commerce;
 		$checkIn  		= new Log_user_checkin;
 		$dataComp 	 	= $newUser->compareOneMonth($data);
@@ -247,13 +242,19 @@ class ReportController extends BaseController {
 		$startLastPeriod = $this->makeDateWithMonthNames($startLastPeriod);
 		$endLastPeriod	 = $dataComp->endPeriod->format('d-m-Y');
 		$endLastPeriod  = $this->makeDateWithMonthNames($endLastPeriod);
-		$makeLastPeriod = $startLastPeriod.' - '.$endLastPeriod;	
-		$mainReport 	= $this->makeReport($data);
+		$makeLastPeriod = $startLastPeriod.' - '.$endLastPeriod;
+
+		$totalVisitsByPeriod = $checkIn->getCheckInReportByPeriod($data); /*Numero total visitas en el periodo*/
+		$totalUsersByPeriod	 = $newUser->getNewUserReportByPeriod($data);	  /*Numero total usuarios registrados en el periodo */
+		$mainReport = $this->combineReport($totalUsersByPeriod->toArray(),$totalVisitsByPeriod->toArray(),$data); /*Combina los reportes de visitas y nuevos usuarios*/
+		//var_dump($mainReport);
+		//$mainReport 	= $this->makeReport($data);
 		$arrayReport = json_encode($mainReport);
 		$arrayReport = json_decode($arrayReport, true);
 		$countNewUsers = 0;
 		$countCheckIns = 0;
 		$totalRows = 0;
+		$checkarray = null;
 		foreach ($arrayReport as $key => $value) {
 			$arrayReport[$key]['date'] = $this->makeDateWithMonthNames($value['date']);
 			if($value['afiliations'] == 0  && $value['views']==0){ /*Elimino las fechas en donde no se registraron visitas y tampoco redenciones*/
@@ -264,17 +265,16 @@ class ReportController extends BaseController {
 		}
 		foreach ($arrayReport as $key => $value) {
 			$arrayReport[$key]['porcentAfi'] = $this->makePercent($value['afiliations'],$countNewUsers);
-			$arrayReport[$key]['porcentViews'] = $this->makePercent($value['views'],$countCheckIns);
+			$arrayReport[$key]['porcentViews'] = $this->makePercent($value['views'],$countCheckIns);			
 			$totalRows++;
 		}
 		$crecAfi = $this->getPercentPeriod($countNewUsers,$dataComp->afiliations);
 		$crecVis = $this->getPercentPeriod($countCheckIns,$dataCompViews->views);
-
 		Excel::create('reporte-visitas-afiliaciones', function($excel) use($arrayReport,$totalRows,$countCheckIns,$countNewUsers,$selectedPeriod,$makeLastPeriod,$dataComp,$dataCompViews,$crecAfi,$crecVis) {
 			$excel->sheet('Visitas-Afiliaciones', function($sheet) use($arrayReport,$totalRows,$countCheckIns,$countNewUsers,$selectedPeriod,$makeLastPeriod,$dataComp,$dataCompViews,$crecAfi,$crecVis) {
-  				$sheet->rows(array(
-  					array('Fecha','Afiliaciones','Visitas','% Afiliaciones','% Visitas')
-				));				
+				$sheet->rows(array(
+					array('Fecha','Afiliaciones','Visitas','% Afiliaciones','% Visitas')
+				));
 				$sheet->rows($arrayReport);
 				$sheet->rows(array(
 					array('Total',$countNewUsers,$countCheckIns,'100%','100%')
@@ -287,22 +287,22 @@ class ReportController extends BaseController {
 				});				
 				$sheet->cells('A1:E1', function($cells) {			
 					$cells->setFont(array(
-    					'size' => '13',
-    					'bold' =>  true
+						'size' => '13',
+						'bold' =>  true
 					));				
 				});
 				$sheet->cells('B1:E1', function($cells) {			
 					$cells->setAlignment('right');
 				});
 				 $sheet->rows(array(
-  					array(''),
-  					array(''),
-  					array('Periodo seleccionado: ','','','',$selectedPeriod),
-  					array('Periodo anterior: ','','','',$makeLastPeriod),
-  					array('Afiliaciones en el periodo anterior: ','','','',$dataComp->afiliations),
-  					array('Visitas en el periodo anterior: ','','','',$dataCompViews->views),
-   					array('Crecimiento de afiliaciones vs periodo anterior: ','','','',$crecAfi), 					
-  					array('Crecimiento de visitas vs periodo anterior: ','','','',$crecVis)
+					array(''),
+					array(''),
+					array('Periodo seleccionado: ','','','',$selectedPeriod),
+					array('Periodo anterior: ','','','',$makeLastPeriod),
+					array('Afiliaciones en el periodo anterior: ','','','',$dataComp->afiliations),
+					array('Visitas en el periodo anterior: ','','','',$dataCompViews->views),
+					array('Crecimiento de afiliaciones vs periodo anterior: ','','','',$crecAfi), 					
+					array('Crecimiento de visitas vs periodo anterior: ','','','',$crecVis)
 				));
 				$labelRows = $totalRows+5;
 				for ($i=0; $i <6 ; $i++) {
@@ -313,11 +313,11 @@ class ReportController extends BaseController {
 				}
 				$sheet->cells('A'.($labelRows).':D'.($labelRows+5).'', function($cells) {			
 					$cells->setFont(array(
-    					'size'       => '12',
-    					'bold'       =>  true
+						'size'       => '12',
+						'bold'       =>  true
 					));				
 				});
-    		});
+			});
 		})->export('xls');
 	}
 
@@ -325,8 +325,8 @@ class ReportController extends BaseController {
 
 	private function makeRedemptionsReport($data){
 		$startSelectedPeriod = $this->makeDateWithMonthNames($data->startDate);
- 		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
- 		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;			
+		$endSelectedPeriod	 = $this->makeDateWithMonthNames($data->endDate);
+		$selectedPeriod = $startSelectedPeriod.' - '.$endSelectedPeriod;			
 		$redemption 		 = new Redemption;
 		$mainReport 		 = $redemption->getDataByPeriod($data);
 		$dataCompRedemptions = $redemption->compareOneMonth($data);
@@ -362,43 +362,43 @@ class ReportController extends BaseController {
 
 		Excel::create('reporte-Redenciones', function($excel) use($arrayReport,$unconfirRedemptions,$totalRedemptions,$totalUnconfirmed,$selectedPeriod,$makeLastPeriod,$dataCompRedemptions,$crecimiento,$totalRows,$totalRowsRedemptions) {
 			$excel->sheet('Redenciones', function($sheet) use($arrayReport,$unconfirRedemptions,$totalRedemptions,$totalUnconfirmed,$selectedPeriod,$makeLastPeriod,$dataCompRedemptions,$crecimiento,$totalRows,$totalRowsRedemptions) {
-  				$sheet->rows(array(
-  					array('Recompensa','Total','% Total')
+				$sheet->rows(array(
+					array('Recompensa','Total','% Total')
 				));				
 				$sheet->rows($arrayReport);
 				$sheet->rows(array(
 					array('Total',$totalRedemptions,'100%')
 				));				
-  				$sheet->rows(array(
-  					array(''),  					
-  					array('Recompensa sin confirmar','Total','% Total')
+				$sheet->rows(array(
+					array(''),  					
+					array('Recompensa sin confirmar','Total','% Total')
 				));
 				$sheet->rows($unconfirRedemptions);
 				$sheet->rows(array(
 					array('Total',$totalUnconfirmed,'100%')
 				));				
 				$sheet->rows(array(
-  					array(''),
-  					array(''),
-  					array('Periodo seleccionado: ',$selectedPeriod),
-  					array('Periodo anterior: ',$makeLastPeriod),
-  					array('Redenciones periodo anterior: ',$dataCompRedemptions->redemptions),
-  					array('Crecimiento vs periodo anteior: ',$crecimiento)
+					array(''),
+					array(''),
+					array('Periodo seleccionado: ',$selectedPeriod),
+					array('Periodo anterior: ',$makeLastPeriod),
+					array('Redenciones periodo anterior: ',$dataCompRedemptions->redemptions),
+					array('Crecimiento vs periodo anteior: ',$crecimiento)
 				));
 
 				/*Formato*/
 				/*Asignar bold font a header de rendenciones*/
 				$sheet->cells('A1:C1', function($cells) {			
 					$cells->setFont(array(
-    					'size' => '13',
-    					'bold' =>  true
+						'size' => '13',
+						'bold' =>  true
 					));				
 				});
 				/*Asignar bold font a header de  rendenciones sin confirmar*/
 				$sheet->cells('A'.($totalRowsRedemptions+4).':C'.($totalRowsRedemptions+4).'', function($cells) {			
 					$cells->setFont(array(
-    					'size' => '13',
-    					'bold' =>  true
+						'size' => '13',
+						'bold' =>  true
 					));				
 				});				
 				/*Pintar fila total redenciones de color azul*/
@@ -421,8 +421,8 @@ class ReportController extends BaseController {
 				/*Poner fuente negrita a los labels de los resultados*/
 				$sheet->cells('A'.($labelRows).':A'.($labelRows+3).'', function($cells) {			
 					$cells->setFont(array(
-    					'size'       => '12',
-    					'bold'       =>  true
+						'size'       => '12',
+						'bold'       =>  true
 					));				
 				});
 			});

@@ -11,12 +11,14 @@
 |
 */
 
-
-
+	Route::controller('/perfiles', 'UsersController');
+	Route::controller('/recompensas', 'RewardsController');
 	Route::controller('/reportes', 'ReportController');
 	Route::controller('/comercio', 'CommerceController');
 	Route::controller('/home', 'HomeController');
+	Route::controller('/passreset', 'RemindersController');	
 	Route::controller('/', 'LoginController');
+
 	
 
 

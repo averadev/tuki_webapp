@@ -13,13 +13,13 @@ return array(
     |
     */
 
-    "password" => "Las contraseñas deben contener al menos 6 caracteres y coincidir.",
+    "password" => "Las contraseñas deben coincidir y tener al menos 6 caracteres.",
 
-    "user"     => "No podemos encontrar a un usuario con ese correo electrónico.",
+    "user"     => "Correo electrónico no registrado.",
 
-    "token"    => "Este token de recuperación de contraseña es inválido.",
+    "token"    => "El token utilizado es inválido, intente volver a generar el link.",
 
-    "sent"     => "¡Recordatorio de contraseña enviado!",
+    "sent"     => "¡Recordatorio enviado, revise su correo!",
 
     "reset"    => "Su contraseña ha sido restablecida!",
 

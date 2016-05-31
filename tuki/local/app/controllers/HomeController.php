@@ -3,7 +3,8 @@
 class HomeController extends BaseController {
 	/*
 	|--------------------------------------------------------------------------
-	| Controlador para la pagina Home / Dashboard
+	| Controlador para el modulo Home / Dashboard
+	| Code By CarlosKF - GeekBucket -
 	|--------------------------------------------------------------------------
 	|
 	*/
@@ -14,15 +15,10 @@ class HomeController extends BaseController {
 	}	
 
 	public function getIndex(){
-			$id = Auth::id();
-			$data = Commerce::find($id);
-			$dataCommerce = new stdClass();
-			$dataCommerce->id = $data->id;
-			$dataCommerce->image = $data->image;
-			$dataCommerce->name = $data->name;
+			$dataCommerce = Commerce::getCommerceID();
 			$now = new DateTime();
-  			$month = $now->format('n');		
-			$dataChart = json_encode(Log_new_user_commerce::getDataByMonth($data,'03'));					
+  			$month = $now->format('n');
+			$dataChart = json_encode(Log_new_user_commerce::getDataByMonthNewUser('03'));					
 			return View::make('welcome.home')
 			->with('commerce',$dataCommerce)
 			->with('chartcom',$dataChart)
@@ -32,12 +28,10 @@ class HomeController extends BaseController {
 	public function getMakeCharts(){
 		if(Request::ajax()){
 			$data = [
-				'commerce'	=> trim(Input::get('commerce')),
 				'month'   	=> trim(Input::get('month')),
 				'chartType' => trim(Input::get('chart'))
 			];
 			$rules = [
-				'commerce' 	=> 'required',
 				'month'   	=> 'required',
 				'chartType' => 'required'
 			];
@@ -49,7 +43,7 @@ class HomeController extends BaseController {
   					$report->totalCurrentMonthCheckIns = Log_new_user_commerce::getMonthPeriod($data->month);
   					$report->totalLastMonthCheckIns = Log_new_user_commerce::getLastMonthPeriod($data->month);
   					$report->totalLastMonthSamePeriod = Log_new_user_commerce::getLasRelativePeriodMonth($data->month);					
-					$dataChart = Log_new_user_commerce::getDataByMonth($data->commerce,$data->month);
+					$dataChart = Log_new_user_commerce::getDataByMonthNewUser($data->month);
 					return Response::json(array('success' => true,'dataPercents'=>$report,'data' => $dataChart,'chart'=>1,),200);
 				}
 				if($data->chartType == 2){
@@ -57,7 +51,7 @@ class HomeController extends BaseController {
   					$report->totalCurrentMonthCheckIns = Log_user_checkin::getMonthPeriod($data->month);
   					$report->totalLastMonthCheckIns = Log_user_checkin::getLastMonthPeriod($data->month);
   					$report->totalLastMonthSamePeriod = Log_user_checkin::getLasRelativePeriodMonth($data->month);
-					$dataChart = Log_user_checkin::getDataByMonth($data->commerce,$data->month);
+					$dataChart = Log_user_checkin::getDataByMonthUser_checkin($data->month);
 					return Response::json(array('success' => true, 'dataPercents'=>$report, 'data' => $dataChart,'chart'=>2),200);
 				}
 				if($data->chartType == 3){
@@ -65,7 +59,7 @@ class HomeController extends BaseController {
   					$report->totalCurrentMonthCheckIns = Redemption::getMonthPeriod($data->month);
   					$report->totalLastMonthCheckIns = Redemption::getLastMonthPeriod($data->month);
   					$report->totalLastMonthSamePeriod = Redemption::getLasRelativePeriodMonth($data->month);									
-					$dataChart = Redemption::getDataByMonth($data->commerce,$data->month);
+					$dataChart = Redemption::getDataByMonthRedemption($data->month);
 					return Response::json(array('success' => true,'dataPercents'=>$report,'data' => $dataChart,'chart'=>3),200);
 				}
 			}

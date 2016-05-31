@@ -39,7 +39,7 @@ return array(
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'America/Cancun',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
+		'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
 
 
 	),
@@ -192,7 +193,10 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'Excel' 		  => 'Maatwebsite\Excel\Facades\Excel',
-		'Image' 		  => 'Intervention\Image\Facades\Image'
+		'Image' 		  => 'Intervention\Image\Facades\Image',
+		'Params'    	  => 'Efficiently\AuthorityController\Facades\Params',
+		'Authority' 	  => 'Efficiently\AuthorityController\Facades\Authority',
+
 	),
 
 );

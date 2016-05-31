@@ -31,8 +31,11 @@ return array(
     'Jeremeamia\\SuperClosure' => array($vendorDir . '/jeremeamia/SuperClosure/src'),
     'Illuminate' => array($vendorDir . '/laravel/framework/src'),
     'File' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
+    'Efficiently\\AuthorityController' => array($vendorDir . '/efficiently/authority-controller/src'),
     'Crypt' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'ClassPreloader' => array($vendorDir . '/classpreloader/classpreloader/src'),
     'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
     'Boris' => array($vendorDir . '/d11wtq/boris/lib'),
+    'Authority\\AuthorityL4' => array($vendorDir . '/machuga/authority-l4/src'),
+    'Authority' => array($vendorDir . '/machuga/authority/src'),
 );

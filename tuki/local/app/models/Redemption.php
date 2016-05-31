@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+* 	Modelo para los canjes/recompensas
 */
 use Carbon\Carbon;
 class Redemption extends Eloquent
@@ -9,7 +9,7 @@ class Redemption extends Eloquent
 	protected $table = "redemption";
 	protected $SoftDelete = false;
 
-	public static function getDataByMonth($idCommerce,$month){
+	public static function getDataByMonthRedemption($month){
 		$count=0;
 		$items = array();
 		for ($i=1; $i <=30 ; $i+=5) {
@@ -19,7 +19,7 @@ class Redemption extends Eloquent
 				$end = 5;
 			}
 			$data = self::select('dateRedemption')
-			->where('idCommerce','=',$idCommerce)
+			->whereIn('idBranch',Commerce::getBranchLoggedIn())
 			->whereBetween('dateRedemption',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 23:59:59'))
 			->count();
 			 $items[$count++] = $data;
@@ -35,7 +35,7 @@ class Redemption extends Eloquent
 
 		$dailydata = $this->select(DB::raw('rwrd.name,count(*) as redemptions'))
 		->join('reward as rwrd','rwrd.id','=','idReward')
-		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->where('redemption.status','!=','3')
 		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->groupBy('idReward')
@@ -50,7 +50,7 @@ class Redemption extends Eloquent
 		$to   = Carbon::parse($to);
 		$dailydata = $this->select(DB::raw('rwrd.name,count(*) as redemptions'))
 		->join('reward as rwrd','rwrd.id','=','idReward')
-		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->where('redemption.status','=','1')
 		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->groupBy('idReward')
@@ -65,12 +65,13 @@ class Redemption extends Eloquent
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;
 	}
 
+	/*Regresa total de las redenciones dentro de un mes seleccionado*/
 	public static function getLastMonthPeriod($month){
 		$first = date('Y-'.$month.'-01');
 		$first = Carbon::parse($first);
@@ -79,12 +80,13 @@ class Redemption extends Eloquent
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;	
 	}
 
+	/*Obtiene las redenciones de un mes relativo seleccionado*/
 	public static function getLasRelativePeriodMonth($month){
 		$first = date('Y-'.$month.'-01');
 		$first = Carbon::parse($first);
@@ -99,7 +101,7 @@ class Redemption extends Eloquent
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateRedemption)'), array($from,$to))
 		->where('redemption.status','!=','3')
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;		
@@ -112,7 +114,7 @@ class Redemption extends Eloquent
 			$from 	   = Carbon::parse($from);
 			$to 	   = Carbon::parse($to);
 			$totalDays = $from->diffInDays($to);
-			$months = ceil($totalDays/30);
+			$months    = ceil($totalDays/30);
 			$fromComp  = $from->copy()->subMonths($months);
 			$toComp    = $fromComp->copy()->addDays($totalDays);
 			if($toComp->gte($from)){
@@ -126,7 +128,7 @@ class Redemption extends Eloquent
 		$dailyData = $this->select('dateRedemption as date', DB::raw('count(*) as redemptions'))
 		->whereBetween(DB::raw('DATE(redemption.dateRedemption)'), array($fromComp,$toComp))
 		->join('reward as rwrd','rwrd.id','=','idReward')	
-		->where('redemption.idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('redemption.idBranch',Commerce::getBranchLoggedIn())
 		->where('redemption.status','!=','3')		
 		->orderBy('redemption.dateRedemption','ASC')
 		->get();

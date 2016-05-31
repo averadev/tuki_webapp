@@ -29,19 +29,27 @@
 				var wmax = W/w;
 				var hmax = H/h;
 				var radio = 0;
+				var resizeWidth = false;
 				if(wmax > hmax){
 				radio = wmax;
+				resizeWidth = true;
 				}else{
 				radio = hmax;
+				resizeWidth = false;
 				}
-				w = w * radio;
-				h = h * radio;
+				w = Math.ceil(w * radio);
+				h = Math.ceil(h * radio);
+				if ((W == w ) && (H == h )) {
+					sameSize = true;
+				}
 			}
 			return {
 				'width': w,
 				'height': h,
 				'cropped': c,
-				'sameSize': sameSize
+				'sameSize': sameSize,
+				'radio': radio,
+				'resizeWidth': resizeWidth
 			};
 		},
 		dataURLtoBlob: function(data) {
@@ -66,6 +74,28 @@
 				return bb;
 			}
 		},
+		getCanvasImg: function(file,canvas,size,height,width,quality){
+			// if rotated width and height data replacing issue
+			var newcanvas = document.createElement('canvas');
+			newcanvas.width = size.cropped === 'h' ? height : width;
+			newcanvas.height = size.cropped === 'w' ? width : height;
+			var x = size.cropped === 'h' ? (height - width) * .5 : 0;
+			var y = size.cropped === 'w' ? (width - height) * .5 : 0;
+			newctx = newcanvas.getContext('2d');
+			newctx.drawImage(canvas, x, y, width, height);
+			//console.log(file, file.type);
+			if (file.type === "image/png") {
+				var data = newcanvas.toDataURL(file.type);
+			} else {
+				var data = newcanvas.toDataURL("image/jpeg", (quality));
+			}
+			var canvasimg = {
+				'data': data,
+				'newcanvas': newcanvas
+			}
+			return canvasimg;
+		},
+
 		/**
 		 * Detect subsampling in loaded image.
 		 * In iOS, larger images than 2M pixels may be subsampled in rendering.
@@ -246,14 +276,13 @@
 			//this.options.init(this);
 			var $this = this;
 			var file = this.file;
-			var fileTypes = ['jpg', 'jpeg', 'png', 'gif', 'svg']; 
+			var fileTypes = ['jpg', 'jpeg', 'png', 'gif']; 
 			var extension = file.name.split('.').pop().toLowerCase();
 			isSuccess = fileTypes.indexOf(extension) > -1;
 			
-            if(isSuccess){
-                console.log(isSuccess);
+			if(isSuccess){
 				var reader = new FileReader();
-				reader.onloadend = function(e) {		
+				reader.onloadend = function(e) {
 					var dataURL = e.target.result;
 					var byteString = atob(dataURL.split(',')[1]);
 					var binary = new BinaryFile(byteString, 0, byteString.length);
@@ -269,18 +298,37 @@
 						var size = (orientation >= 5 && orientation <= 8)
 								? methods.newsize(img.height, img.width, $this.options.width, $this.options.height, $this.options.crop)
 								: methods.newsize(img.width, img.height, $this.options.width, $this.options.height, $this.options.crop);
+
+						/*Real size to crop*/
+						var realPic = (orientation >= 5 && orientation <= 8)
+								? methods.newsize(img.height, img.width, $this.options.real_width, $this.options.real_height, $this.options.crop)
+								: methods.newsize(img.width, img.height, $this.options.real_width, $this.options.real_height, $this.options.crop);								
+													
 						var iw = img.width, ih = img.height;
 						var width = size.width, height = size.height;
+
+						/*Real dimensions*/
+						var real_width = realPic.width;
+						var real_height = realPic.height;
+
 						var canvas = document.createElement("canvas");
 						var ctx = canvas.getContext("2d");
 						ctx.save();
 						methods.transformCoordinate(canvas, width, height, orientation);
-				
+
+						/*Real canvas*/
+
+						var real_canvas = document.createElement("canvas");
+						var ctx_real = real_canvas.getContext("2d");
+						ctx_real.save();
+						methods.transformCoordinate(real_canvas, real_width, real_height, orientation);
+
 						// over image size
 						if (methods.detectSubsampling(img)) {
 							iw /= 2;
 							ih /= 2;
 						}
+
 						var d = 1024; // size of tiling canvas
 						var tmpCanvas = document.createElement('canvas');
 						tmpCanvas.width = tmpCanvas.height = d;
@@ -305,24 +353,36 @@
 						}
 						ctx.restore();
 						tmpCanvas = tmpCtx = null;
-				
-						// if rotated width and height data replacing issue 
-						var newcanvas = document.createElement('canvas');
-						newcanvas.width = size.cropped === 'h' ? height : width;
-						newcanvas.height = size.cropped === 'w' ? width : height;
-						var x = size.cropped === 'h' ? (height - width) * .5 : 0;
-						var y = size.cropped === 'w' ? (width - height) * .5 : 0;
-						newctx = newcanvas.getContext('2d');
-						newctx.drawImage(canvas, x, y, width, height);
-						//console.log(file, file.type);
-						if (file.type === "image/png") {
-							var data = newcanvas.toDataURL(file.type);
-						} else {
-							var data = newcanvas.toDataURL("image/jpeg", ($this.options.quality * .01));
+
+						var tmpCanvas = document.createElement('canvas');
+						tmpCanvas.width = tmpCanvas.height = d;
+						var tmpCtx = tmpCanvas.getContext('2d');
+						var vertSquashRatio = methods.detectVerticalSquash(img, iw, ih);
+						var sy = 0;
+						while (sy < ih) {
+							var sh = sy + d > ih ? ih - sy : d;
+							var sx = 0;
+							while (sx < iw) {
+								var sw = sx + d > iw ? iw - sx : d;
+								tmpCtx.clearRect(0, 0, d, d);
+								tmpCtx.drawImage(img, -sx, -sy);
+								var dx = Math.floor(sx * real_width / iw);
+								var dw = Math.ceil(sw * real_width / iw);
+								var dy = Math.floor(sy * real_height / ih / vertSquashRatio);
+								var dh = Math.ceil(sh * real_height / ih / vertSquashRatio);
+								ctx_real.drawImage(tmpCanvas, 0, 0, sw, sh, dx, dy, dw, dh);
+								sx += d;
+							}
+							sy += d;
 						}
+						ctx_real.restore();
+						tmpCanvas = tmpCtx = null;						
+				
+						var data_real = methods.getCanvasImg(file,real_canvas,realPic,real_height,real_width,($this.options.quality * .01));
+						var data = methods.getCanvasImg(file,canvas,size,height,width,($this.options.quality * .01));
 						$this.options.progressbar.animate({width:"100%"});
 						// CALLBACK
-						$this.options.callback(data, newcanvas.width, newcanvas.height,size.sameSize);
+						$this.options.callback(data.data, data.newcanvas.width, data.newcanvas.height,size.sameSize,size.radio,size.resizeWidth,data_real.data);
 						$this.options.progressbar.parent('div').hide();
 						$this.options.progressbar.animate({width:"0%"});
 				
@@ -332,21 +392,21 @@
 					// =====================================================
 
 			};
-		    reader.onprogress = function(data) {
-		    	if (data.lengthComputable) { 
-		    		$this.options.progressbar.parent('div').show();		
-		    		var progress = 0;
-		    		progress = parseInt( ((data.loaded / data.total) * 100), 10 );
-		    		$this.options.progressbar.animate({width:progress+"%"});
-		    	}
-		    }			
+			reader.onprogress = function(data) {
+				if (data.lengthComputable) { 
+					$this.options.progressbar.parent('div').show();		
+					var progress = 0;
+					progress = parseInt( ((data.loaded / data.total) * 100), 10 );
+					$this.options.progressbar.animate({width:progress+"%"});
+				}
+			}			
 			
 			reader.readAsDataURL(file);
 			//reader.readAsBinaryString(file);
 
-            }else{// isSuccesfunction{}
-            alert('Archivo incorrecto');
-            }
+			}else{// isSuccesfunction{}
+			alert('Archivo incorrecto');
+			}
 		}// init function
 	};
 	$[pluginName] = function(file, options) {

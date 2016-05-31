@@ -86,11 +86,13 @@ return array(
         "string"       => "Debe contener :size caracteres.",
         "array"        => "Debe contener :size elementos.",
     ),
-    "unique"                => "Ya ha sido registrado.",
-    "longitud_latitud"      => "El formato no es correcto.",    
-    "url"                   => "El formato es inválido.",
-    "timezone"              => "El debe ser una zona válida.",
-    "time_with_meridian"    => "El formato es inválido.",
+    "unique"                  => "Ya ha sido registrado.",
+    "longitud_latitud"        => "El formato no es correcto.",
+    "valid_imagebase64"       => "El formato de la imagen no es correcto.",
+    "url"                     => "El formato es inválido.",
+    "timezone"                => "El debe ser una zona válida.",
+    "time_with_meridian"      => "El formato es inválido.",
+    "date_greater_than_today" => "Campo debe ser mayor a la fecha actual",
 
     /*
     |--------------------------------------------------------------------------

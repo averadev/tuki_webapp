@@ -1,7 +1,6 @@
 var report = function() {
 
-	var bindEvents = function (){						
-
+	var bindEvents = function (){
 		$('#dp1').fdatepicker({
 			format: 'dd/mm/yyyy',
 			language: 'es',
@@ -24,6 +23,7 @@ var report = function() {
 			$("#tableRedemptions").hide();
 			$("#tableActiv").hide();
 			$("#divSubmitExcel").hide();
+			$("#reportDetails").hide();
 		});
 
 		$('#makeExcel').click(function(event){
@@ -47,6 +47,8 @@ var report = function() {
 			dataType: 'json',
 			data: inputs,
 		}).done(function(response) {
+			$('#reportDetails').show();
+			$("#reportToExport").hide();
 			if(response.report){
 				if(response.report == 1){ /*Report de Actividades*/
 					if(response.totalCheckIns > 0 || response.totalUsers > 0 || response.dataRedemption.length > 0){
@@ -64,16 +66,20 @@ var report = function() {
 						$('#avgVisitClient').text(avgVisitClient);
 						$("#tableActiv").show();
 						$("#divSubmitExcel").show();
-						if(response.dataRedemption.length > 0){					
+						if(response.dataRedemption.length > 0){
+							$("#reportToExport").show();					
 							makeRedemptionsReport(response);
 						}
 					}else{
 						$("#divSubmitExcel").hide();
+						$("#reportToExport").hide();
+						$("#reportDetails").hide();
 						alert('NO SE ENCONTRARON DATOS');				
 					}
 				}/* END reporte de Actividades */
 				if(response.report == 2){/* Reporte de afiliaciones y visitas */
 					if(response.dataCommerce.length > 0){
+						$("#reportToExport").show();
 						var totalRegistrados = 0;
 						var totalVisitas = 0;
 						var bodytable = null;
@@ -89,9 +95,9 @@ var report = function() {
 						var headerTable =   '<thead>'+
 												'<tr>'+
 													'<th>Fecha</th>'+
-													'<th>Registros</th>'+
+													'<th>Afiliaciones</th>'+
 													'<th>Visitas</th>'+
-													'<th>% Registros</th>'+
+													'<th>% Afiliaciones</th>'+
 													'<th>% Visitas</th>'+
 												'</tr>'+
 											'</thead>'+
@@ -99,11 +105,8 @@ var report = function() {
 						$('#reportToExport').append(mainTable);
 						$('#tableData').append(headerTable);
 						$.each(response.dataCommerce, function(index, val) {
-							if(val.afiliations== 0 && val.views == 0){
-								return true;
-							}
-       						count = count + Number(val.afiliations);
-       						countviews = countviews + Number(val.views);
+							count = count + Number(val.afiliations);
+							countviews = countviews + Number(val.views);
 							bodytable =bodytable+ ('<tr><td>'+MakeDateFormat(val.date)+'</td><td>'+val.afiliations+'</td><td>'+val.views+'</td><td>'+getPorcent(val.afiliations,totalRegistrados)+'</td><td>'+getPorcent(val.views,totalVisitas)+'</td></tr>');
 						});
 						$('#tableData').append('<tbody>'+bodytable+'</tbody>');
@@ -136,11 +139,15 @@ var report = function() {
 						$("#divCompare").hide();
 						$('#dataCompare').empty();
 						$("#divSubmitExcel").hide();
+						$("#reportToExport").hide();
+						$("#reportDetails").hide();
 						alert('NO SE ENCONTRARON DATOS');
 					}
 				}/* END reporte de afiliaciones y visitas */
 				if(response.report == 3){ /*Reporte de Redenciones*/
 					if(response.dataRedemption.length > 0){
+						$("#reportToExport").show();
+						$("#divSubmitExcel").show();
 						makeRedemptionsReport(response);
 						if(response.unconfirmedRedemptions.length > 0){ //Tabla de redenciones sin confirmar
 							var mainUnTable = '<div id="dataUnconfirmed" style="height: auto; padding-bottom:30px; background-color: white;" ><div> <table id="tableUnconfirmed" class="responsive table tableData table-bordered table-striped"></table><div>';
@@ -172,6 +179,8 @@ var report = function() {
 						$("#tableRedemptions").hide();
 						$('#dataCompare').empty();
 						$("#divSubmitExcel").hide();
+						$("#reportDetails").hide();
+						$("#reportToExport").hide();
 						alert('NO SE ENCONTRARON DATOS');
 					}
 				} /*END Reporte de Redenciones*/
@@ -246,10 +255,10 @@ var report = function() {
 
 	var MakeDateFormat = function(date){
 		var day   = (date).substring(0,2);
-       	var month = Number((date).substring(3,5));
-       	var year  = (date).substring(6,10);
-       	var date = day+'/'+getMonthNames(month)+'/'+year;
-       	return date;
+		var month = Number((date).substring(3,5));
+		var year  = (date).substring(6,10);
+		var date = day+'/'+getMonthNames(month)+'/'+year;
+		return date;
 	}
 
 	var getInputsReport = function(){

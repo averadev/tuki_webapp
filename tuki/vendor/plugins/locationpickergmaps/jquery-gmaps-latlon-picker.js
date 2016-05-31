@@ -21,8 +21,8 @@ if (!window.console.log) window.console.log = function () { };
 // ^^^
 
 $.fn.gMapsLatLonPicker = (function() {
-
-	var _self = this;
+/*global to resize the map on modal open event*/
+	_self = this;
 
 	var input = document.getElementById('autocomplete-google');
 	var autocomplete = new google.maps.places.Autocomplete(input);
@@ -139,6 +139,27 @@ $.fn.gMapsLatLonPicker = (function() {
 			}
 		);
 	};
+	var getLocation =  function () {	
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		} else {
+			error('Geo Location is not supported');
+		}
+	}
+	var showPosition = function(position) {
+		var latlon = position.coords.latitude + "," + position.coords.longitude;
+		$('#latBranch').val(position.coords.latitude);
+		$('#longBranch').val(position.coords.longitude);
+		var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		//$(".gllpUpdateButton").trigger( "click" );
+		//var latlng = new google.maps.LatLng(lat, lng);
+		//_self.vars.map.setZoom( parseInt( $(_self.vars.cssID + ".gllpZoom").val() ) );
+		setPosition(latlng);
+
+		//var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+		//+latlon+"&zoom=14&size=400x300&sensor=false";
+		//document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+	}	
 
 	// error function
 	var displayError = function(message) {
@@ -202,13 +223,21 @@ $.fn.gMapsLatLonPicker = (function() {
 				title: _self.params.strings.markerText,
 				draggable: true
 			});
-			
 
-			
+			$('#locationEditable:checkbox').change(function () {
+				if($('#locationEditable').is(":checked")){ /*if editable checkbox is selected*/
+					google.maps.event.addListener(_self.vars.map, 'dblclick', function(event) {
+						setPosition(event.latLng);
+					});
 
-			// Set position on doubleclick
-			google.maps.event.addListener(_self.vars.map, 'dblclick', function(event) {
-				setPosition(event.latLng);
+					if(!($("#latBranch").val() && $("#longBranch").val()) || ($("#latBranch").val() == 0 && $("#longBranch").val() == 0) ){
+						getLocation();
+					}
+				}else{
+					google.maps.event.clearListeners(_self.vars.map, 'dblclick', function(event) {
+						setPosition(event.latLng);
+					});
+				}			 
 			});
 
 			// Set position on marker move
@@ -259,6 +288,7 @@ $.fn.gMapsLatLonPicker = (function() {
 }(jQuery));
 
 $(document).ready( function() {
+	/*Descomentar si no se utiliza en un modal y se carga cuando en una sola vista*/
 	$(".gllpLatlonPicker").each(function() {
 		$(document).gMapsLatLonPicker().init( $(this) );
 	});

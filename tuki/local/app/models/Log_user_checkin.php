@@ -6,11 +6,10 @@
 use Carbon\Carbon;
 class Log_user_checkin extends Eloquent
 {
-
 	protected $table = "log_user_checkin";
 	protected $SoftDelete = false;
 
-	public static function getDataByMonth($idCommerce,$month){
+	public static function getDataByMonthUser_checkin($month){
 		$count=0;
 		$items = array();
 		for ($i=1; $i <=30 ; $i+=5) {
@@ -20,14 +19,15 @@ class Log_user_checkin extends Eloquent
 				$end = 5;
 			}
 			$data = self::select('dateAction')
-			->where('idCommerce','=',$idCommerce)
+			->whereIn('idBranch',Commerce::getBranchLoggedIn())
 			->whereBetween('dateAction',array(date("Y").'-'.$month.'-'.$day,date("Y").'-'.$month.'-'.($day+$end).' 23:59:59'))
 			->count();
 			 $items[$count++] = $data;
 		}
 		return $items;
 	}
-	
+
+	/*Obtiene un arreglo con el numero de total de visitas por cada dia en un rango de fechas*/	
 	public function getCheckInReportByPeriod ($data){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate)));
@@ -36,19 +36,20 @@ class Log_user_checkin extends Eloquent
 		$check =  Carbon::parse($from)->format('d-m-Y H:i:s');
 		$dailyData = $this->select(DB::raw("date_format((dateAction),'%d-%m-%Y') as date"), DB::raw('count(*) as views'))
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
-		->groupBy('dateAction')
-		->orderBy('dateAction','ASC')
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
+		->groupBy('date')
+		->orderBy('date','ASC')
 		->get();
 	  	return $dailyData;		
 	}
 
+	/*Obtiene el numero total de visitas en un periodo seleccionado, ex 100 visitas*/
 	public function getTotalCheckInsByPeriod($data){
 		$from = date('Y-m-d',strtotime(str_replace('/', '-', $data->startDate)));
 		$to   = (date('Y-m-d',strtotime(str_replace('/', '-', $data->endDate))));
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;	
@@ -60,7 +61,7 @@ class Log_user_checkin extends Eloquent
 		$to = $from->copy()->lastOfMonth()->format('Y-m-d');
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;
@@ -73,7 +74,7 @@ class Log_user_checkin extends Eloquent
 		$to = $from->copy()->lastOfMonth();
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;	
@@ -92,7 +93,7 @@ class Log_user_checkin extends Eloquent
 		}
 		$dailyData = self::select('idUser')
 		->whereBetween(DB::raw('DATE(dateAction)'), array($from,$to))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
 		->get()
 		->count();
 	  	return $dailyData;		
@@ -120,7 +121,7 @@ class Log_user_checkin extends Eloquent
 		}
 		$dailyData = $this->select('dateAction as date', DB::raw('count(*) as views'))
 		->whereBetween(DB::raw('DATE(dateAction)'), array($fromComp,$toComp))
-		->where('idCommerce','=',Commerce::getCommerceID()->id)
+		->whereIn('idBranch',Commerce::getBranchLoggedIn())
 		->orderBy('dateAction','ASC')
 		->get();
 

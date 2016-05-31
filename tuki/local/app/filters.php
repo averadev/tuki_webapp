@@ -19,7 +19,7 @@ App::before(function($request)
 
 App::after(function($request, $response)
 {
-	//
+	DB::disconnect(); /* Fix too many connections exception*/
 });
 
 /*

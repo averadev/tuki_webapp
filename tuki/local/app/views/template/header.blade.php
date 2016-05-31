@@ -7,7 +7,7 @@
 			<ul class="menu">
 				<li> 
 					<a href="{{URL::to('/')}}" >
-						<img id="logo_header" style="width: 50px; height: 50px; font-family: HelveticaNeuel;" class="" src="{{ 	$commerce->image }}" alt="logo" />
+						<img id="logo_header" style="width: 50px; height: 50px; font-family: HelveticaNeuel;" class=""  src="api/assets/img/api/commerce/{{$commerce->image }}" alt="logo" />
 					</a>  
 				</li>
 				<li>  
