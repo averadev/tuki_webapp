@@ -60,5 +60,13 @@ class Branch extends Eloquent
 		}
 		return false;
 	}
+	/* Información de los comercios para las fichas */ 
+	public function getBranchInformation($id){
+
+		$dataBranchInformation = Branch::where( 'idCommerce', '=', $id )
+		->get();
+
+		return $dataBranchInformation;
+	}
 
 }

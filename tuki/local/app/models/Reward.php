@@ -55,6 +55,16 @@ class Reward extends Eloquent{
 		}
 		return false;
 	}
+	/* Obtener recompensas del comercio mediante su $id para la ficha y su status */
+	public function getCommerceRewardsTest($id){
+
+
+		$dataRewardTest =  Reward::where( 'idCommerce', $id )
+		->where('status', 1)
+		->get();
+
+		return $dataRewardTest;
+	}
 
 	
 }
