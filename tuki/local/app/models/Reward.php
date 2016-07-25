@@ -66,5 +66,18 @@ class Reward extends Eloquent{
 		return $dataRewardTest;
 	}
 
+	public function getRewardCommerce($idComm, $idRew){
+
+		$dataRewardComm = Reward::where('idCommerce', $idComm)
+		->where('id', $idRew)
+		->where('status', 1)
+		->get();
+		if (!$dataRewardComm->isEmpty()){
+    		$dataRewardComm = $dataRewardComm->first();
+		}
+
+		return $dataRewardComm;
+	}
+
 	
 }

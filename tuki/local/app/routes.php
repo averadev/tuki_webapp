@@ -11,6 +11,7 @@
 |
 */
 	Route::get('/comercios/{id}','RewardsCommerceController@showRewards');
+	Route::get('/comercios/{idCommerce}/{idReward?}','RewardCommerceController@showRewardCommerce');
 	Route::controller('/perfiles', 'UsersController');
 	Route::controller('/recompensas', 'RewardsController');
 	Route::controller('/reportes', 'ReportController');
