@@ -13,6 +13,9 @@
 	<title>TUKI: {{$commerce->name}}</title>
 
 	<style>
+	.centerLogo{
+		background-image: url("../api/assets/img/api/commerce/{{$commerce->image }}");
+	}
 	.border{
 		border-style: solid;
 		border-width: 4px;
@@ -30,7 +33,7 @@
 		padding:0; 
 		height:100%;
 		margin-top: -20px;
-		padding-bottom: 16px;
+		padding-bottom: 27px;
 	}
 	.colorBranchPhone{
 		font-weight: bold;
@@ -44,8 +47,7 @@
 		<!-- Logotipo del comercio -->
 		<div class=" small-12 medium-4 large-4 columns logoPadding">
 			<div class="small-12 medium-12 large-12 columns logoContenedor infoColor border ">
-				<div class="centerLogo">
-					<img class="imgCenter" src="../api/assets/img/api/commerce/{{$commerce->image }}" alt="">		
+				<div class="centerLogo">							
 				</div>
 			</div>			
 		</div>
@@ -57,16 +59,16 @@
 						<div class="row paddingTop20 paddingLeft20 tamRowInfoN">
 							<!-- Nombre del comercio-->
 							<div class="small-12 medium-12 large-12 columns">
-								<p class="infoSize"><span class="commerceName">{{$commerce->name}}</span></p>		
+								<p class="infoSize commerceName ">{{$commerce->name}}</p>		
 							</div>							
 						</div>
 						<div class="row paddingLeft20 tamRowInfoD">
 							<!-- Dirección del comercio-->
-							<div class="small-7 medium-7 large-7 columns">
+							<div class="small-12 medium-7 large-7 columns">
 								<p class="infoSize"><i class="fa fa-map-marker fa-lg paddingRightIcon"aria-hidden="true"></i><span id="branchAddress" class="branchInformation branchInformationAddress">{{$branchs[0]->address}}</span></p>							
 							</div>
 							<!-- Telefono del comercio-->
-							<div class="small-5 medium-5 large-5 columns">
+							<div class="small-12 medium-5 large-5 columns">
 								<p class="infoSize"><i class="fa fa-phone fa-lg paddingRightIcon" aria-hidden="true"></i><span id="branchPhone" class="colorBranchPhone branchInformation">{{$branchs[0]->phone}}</span></p>								
 							</div>
 						</div>
@@ -91,11 +93,11 @@
 					<div class="row">
 						<div class="small-12 medium-12 large-12 columns">
 							<div class="bottonBorderImageReward">
-								<img src="../api/assets/img/api/rewards/{{$rewards->image }}" alt="">
+								<img style="max-height:320px;" src="../api/assets/img/api/rewards/{{$rewards->image }}" alt="">
 							</div>
 						</div>
 					</div>
-					<div class="row" style="max-height:99px;">
+					<div class="row" style="height:130px;">
 						<div class="exD small-8 medium-8 large-8 columns" style="padding-right:0px;">
 							<div class="divInfoRew">
 								<p class="infoRewTxt"><b>{{$rewards->name}}</b></p>
@@ -105,10 +107,10 @@
 
 						<div class="exP small-4 medium-4 large-4 columns" style="padding-left: 0px;">
 							<div class ="small-12 medium-12 large-12 columns divPuntos">
-								<div class="small-12 medium-12 large-12 columns txtPoints" style="margin-top: 10px; padding:0; text-align: center;">
+								<div class="small-12 medium-12 large-12 columns txtPoints" style="margin-top: 30px; padding:0; text-align: center;">
 									<div>
-										<p class="ptsMargin"><span class="puntos puntosSize bold-text">{{$rewards->points}}</span></p>
-										<p class="ptsMargin"><span class="puntos ptsFont">PUNTOS</span></p>
+										<p class="ptsMargin puntos puntosSize" ><b>{{$rewards->points}}</b></p>
+										<p class="ptsMargin puntos ptsFont">PUNTOS</p>
 									</div>
 								</div>
 							</div>
@@ -192,7 +194,7 @@
 		}
     </script>
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3ImDzGxDJa82HNYzPeKbIoAMu1JnPz_M&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
     </script>
 </body>
 </html>

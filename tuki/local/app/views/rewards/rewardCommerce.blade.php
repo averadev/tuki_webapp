@@ -208,6 +208,24 @@
 			background-size: 50% 80%;
 		}
 	}
+	@media screen and (min-width: 1024px){
+		.divRew{			
+			height: 430px;
+		}
+		.divImgRew{
+			background-size: 85% 100%;
+		}
+		.divPts{
+			width: 25%;
+		}
+		.divComm{
+			height: 120px;
+		}
+		.divImgComm{
+			background-size: 50% 90%;
+		}
+
+	}
 	
 
 	</style>
@@ -215,13 +233,13 @@
 <body>
 
 	<div class="row divRew">
-		<div class="small-12 medium-8 medium-offset-2 large-12 columns divInter paddingTop" >
-			<div class="small-12 columns bkg ">
+		<div class="small-12 medium-8 medium-offset-2 large-6 large-offset-3 columns divInter paddingTop" >
+			<div class="small-12 medium-12 large-12 columns bkg ">
 				<div class="divImgRew">					
-					<div class="small-12 columns" style="width: 100%; height: 60%; padding: 0px;"></div>
-					<div class="small-12 columns" style="width: 100%; height: 40%; padding: 0px; ">
-						<div class="small-7 columns"></div>
-						<div class="small-5 columns divPts">
+					<div class="small-12 medium-12 large-12 columns" style="width: 100%; height: 60%; padding: 0px;"></div>
+					<div class="small-12 medium-12 large-12 columns" style="width: 100%; height: 40%; padding: 0px; ">
+						<div class="small-7 medium-7 large-7 columns"></div>
+						<div class="small-5 medium-5 large-5 columns divPts">
 							<p class="puntos puntosSize"><b>{{$reward->points}}</b></p>
 							<p class="puntos ptsFont">PUNTOS</p>
 						</div>
@@ -236,11 +254,11 @@
 		</div>
 	</div>
 	<div class="row divComm">
-		<div class="small-12 medium-8 medium-offset-2 large-12 columns divInter paddingTopComm">
-			<div class="small-12 columns bkg">
-				<div class="small-4 columns divImgComm">
+		<div class="small-12 medium-8 medium-offset-2 large-6 large-offset-3 columns divInter paddingTopComm">
+			<div class="small-12 medium-12 large-12  columns bkg">
+				<div class="small-4 medium-4 large-4 columns divImgComm">
 				</div>
-				<div class="small-8 columns divCommInfo">
+				<div class="small-8 medium-8 large-8 columns divCommInfo">
 					<p class="commName"><span class="upTxt bold-text">{{$commerce->name}}</span></p>
 					
 					<p class="infoComm"><i class="fa fa-phone fa-lg paddingRightIcon" aria-hidden="true"></i><span class="colorBranchPhone"><b>{{$branch[0]->phone}}</b></span></p>
@@ -253,8 +271,8 @@
 		</div>
 	</div>
 	<div class="row divExInfo">
-		<div class="small-12 medium-8 medium-offset-2 large-12 columns divInter paddingTop">
-			<div class="small-12 columns">
+		<div class="small-12 medium-8 medium-offset-2 large-6 large-offset-3 columns divInter paddingTop">
+			<div class="small-12 medium-12 large-12 columns">
 				<p class="text-center">Para mayor información sobre el programa de lealtad <b>TUKI</b> visita:</p>
 				<a href="http://tukicard.com/"><p class="text-center linkTukiStyle"><b>www.tukicard.com</b></p></a>
 			</div>
