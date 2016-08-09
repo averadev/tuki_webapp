@@ -105,11 +105,10 @@ class Commerce extends Eloquent
 	}
 	/* Obtener información del comercio mediante su $id para la ficha */
 	public function getCommerceInformation($id){
-
 		$data = self::select('commerce.name','commerce.image','pltte.bg1 as colorR','pltte.bg2 as colorG','pltte.bg3 as colorB')
-		->where('commerce.id','=', $id)
-		->leftJoin('palette as pltte','pltte.id','=','idPalette')
-		->get();
+				->where('commerce.id','=', $id)
+				->leftJoin('palette as pltte','pltte.id','=','idPalette')
+				->get();
 		if (!$data->isEmpty()){
     		$data = $data->first();
 		}

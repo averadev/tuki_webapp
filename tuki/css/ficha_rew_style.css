@@ -1,0 +1,278 @@
+*{
+	font-family: 'Roboto', sans-serif;
+}
+html,body{
+	margin:0px;
+	height:100%;
+	min-width: 320px;
+	min-height: 600px;
+	}
+.rowHeight{
+	height: 100%;
+}
+.divRew{
+	height: 350px;
+}
+.divInterRew{
+	height: 100%;
+}
+.divComm{		
+	height: 150px;
+}
+.divExInfo{
+	height: 120px;
+}
+.divInter{
+	height: 100%;
+}
+.divImgRew{
+	width: 100%;
+	height: 100%;
+}
+.imgRew{
+	height: 100%;
+}
+.aux1{
+	width: 100%; padding: 0px;
+}
+.auxPts{
+	width: 100%; padding: 0px;
+}
+.divInfoRew{
+	width: 100%;		
+	padding: 10px;
+}
+.infoRewTxt{
+	text-transform: uppercase;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0;
+}
+.imgComm{
+	height: 100%;
+}
+.divCommInfo{
+	padding-top: 5px;
+	height: 100%;
+}
+.commName{
+	text-transform: uppercase;
+	font-size: 20px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+.infoComm{
+	margin: 0px;
+}
+.divAux{
+	width: 100%;
+	height: 50%;
+	margin: 0px;
+	padding: 0px;
+}
+.aux1{
+	height: 60%;
+}
+.auxPts{
+	height: 40%;
+}
+.puntos{
+	color:white;
+	margin: 0px;
+}
+.puntosSize{		
+	font-family: 'Open Sans', sans-serif;
+}
+.ptsFont{
+	font-size: 30px;
+}
+.ptsFont{
+	font-family: 'Oswald', sans-serif;
+}
+.paddingRightIcon{
+	padding-right: 10px;
+}
+.paddingTop{
+	padding-top: 20px;
+}
+.paddingTopComm{
+	padding-top: 10px;
+}
+.linkTukiStyle{
+	color: black;
+	text-decoration: underline;
+}
+.bold-text{
+	font-weight: bold;
+}
+/*Redimencionado reward Img*/
+#imgRewSize{
+	z-index: -1;
+	width: 100%;
+	overflow: hidden;
+}
+.crop{			
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+}
+.crop img {
+	position: absolute;
+	top: -100%;
+	bottom: -100%;
+	left: -100%;
+	right: -100%;
+	margin: auto; 
+	height: auto;
+	width: auto;
+}
+@media screen and (max-width: 410px){
+	.divImgComm{
+		background-size: 80% 80%;
+	}
+	#pts{
+		padding-top: 15px;
+	}
+	.ptsFont{
+		font-size: 20px;
+	}
+	.puntosSize{
+		font-size: 30px;
+	}
+}
+@media screen and (min-width: 410px){
+	.divImgComm{
+		background-size: 80% 80%;
+	}
+	#pts{
+		padding-top: 8px;
+	}
+	.puntosSize{		
+		font-size: 40px;
+	}
+	.ptsFont{
+		font-size: 25px;
+	}
+}
+@media screen and (min-width: 450px) and (max-width: 639px){
+	.divImgComm{
+		background-size: 60% 80%;
+	}	
+	.puntosSize{
+		font-size: 40px;
+	}
+}
+@media screen and (max-width: 475px){
+	#imgRewSize{
+		min-height: 100%;
+		min-width: 140%;
+	}
+}
+@media screen and (min-width: 640px){
+	body{
+		padding-bottom: 20px;
+	}		
+	#pts{
+		padding-top: 15px;
+	}		
+	.divInterRew{
+		padding:0px;
+	}
+	.aux1{
+		height: 75%;
+	}
+	.auxPts{
+		height: 25%;
+	}
+	.bkg{
+		border-radius: 5px;
+	}
+	#secDiv{
+		height: 100%;
+	}
+	#divComm{
+		height: 30%;
+	}
+	#rewInfo{
+		height: 50%;
+	}
+	#eX{
+		height: 20%;
+	}
+	.divInfoRew{
+		padding-top: 20px;
+	}
+	.exTextInfo{
+		font-size: 12px;
+	}
+	.linkTukiStyle{
+		font-size: 14px;
+	}
+	.puntosSize{
+		font-size: 35px;
+	}
+}
+@media screen and (min-width: 640px) and (max-width: 832px){
+	#imgRewSize{
+		min-height: 100%;
+		min-width: 220%;
+	}
+	.divImgComm{
+		background-size: 90% 60%;
+	}
+	.infoRewTxt{
+		font-size: 18px;
+	}
+}
+@media screen and (min-width: 832px) and (max-width: 1024px){
+	#imgRewSize{
+		min-height: 100%;
+		min-width: 180%;
+	}
+	.divImgComm{
+		background-size: 80% 60%;
+	}
+	.puntosSize{
+		font-size: 40px;
+	}
+	.infoRewTxt{
+		font-size: 20px;
+	}
+	.infoDescRew{
+		font-size: 18px;
+	}
+}
+@media screen and (min-width: 1024px){
+	.divImgComm{
+		background-size: 90% 60%;
+	}
+	.divImgComm{
+		background-size: 80% 80%;
+	}
+	.infoComm{
+		font-size: 18px;
+	}
+	#pts{
+		padding-top: 10px;
+	}
+	.infoRewTxt{
+		font-size: 25px;
+
+	}
+	.infoDescRew{
+		font-size: 20px;
+	}
+	.puntosSize{
+		font-size: 45px;
+	}
+	.exTextInfo{
+		font-size: 14px;
+	}
+	.linkTukiStyle{
+		font-size: 16px;
+	}
+	#imgRewSize{
+		min-height: 100%;
+		min-width: 140%;
+	}
+}

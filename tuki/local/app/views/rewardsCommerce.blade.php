@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet" href="../css/test.css">
-	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="../css/ficha_style.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto|Open+Sans:800|Oswald:300' rel='stylesheet' type='text/css'>
 	<link media="all" type="text/css" rel="stylesheet" href="../vendor/css/foundation.min.css">
 	<link rel="stylesheet" href="../vendor/plugins/font-awesome/css/font-awesome.css">
-	<meta charset="UTF-8">
 	<script src="../vendor/js/foundation/jquery.min.js"></script>
 
-	<title>TUKI: {{$commerce->name}}</title>
-
-	<style>
+	<style type="text/css">
 	.centerLogo{
 		background-image: url("../api/assets/img/api/commerce/{{$commerce->image }}");
 	}
@@ -75,7 +72,7 @@
 					</div>
 				</div>
 
-				<!-- Mapa de ubicacion del comercio -->
+				<!-- Mapa de ubicación comercios -->
 				<div class=" small-12 medium-12 large-12 infColor infoPaddingMap">
 					<div class="tamInfo border">
 						<div id="map"></div>
@@ -85,31 +82,33 @@
 	</div>
 
 	<div class="row small-up-1 medium-up-2 large-up-3  min-W">
-		<!-- Rewards del comercio-->
+		<!-- Rewards comercio-->
 		@foreach($rewards AS $rewards)
 		<div class="small-12 medium-4 large-4 columns inlineReward">
 			<div class="rewardsPadding">
 				<div class="border">
 					<div class="row">
+						<!--Img rew-->
 						<div class="small-12 medium-12 large-12 columns">
 							<div class="bottonBorderImageReward">
-								<img style="max-height:320px;" src="../api/assets/img/api/rewards/{{$rewards->image }}" alt="">
+								<img src="../api/assets/img/api/rewards/{{$rewards->image }}" alt="">
 							</div>
 						</div>
 					</div>
 					<div class="row" style="height:130px;">
+						<!--Descripción rew-->
 						<div class="exD small-8 medium-8 large-8 columns" style="padding-right:0px;">
 							<div class="divInfoRew">
-								<p class="infoRewTxt"><b>{{$rewards->name}}</b></p>
-								<p><i>{{substr($rewards->description,0,20)}}...</i></p>
+								<p class="infoRewTxt">{{$rewards->name}}</p>
+								<p><i><b>{{substr($rewards->description,0,20)}}...</b></i></p>
 							</div>
 						</div>
-
+						<!--Puntos rew-->
 						<div class="exP small-4 medium-4 large-4 columns" style="padding-left: 0px;">
 							<div class ="small-12 medium-12 large-12 columns divPuntos">
-								<div class="small-12 medium-12 large-12 columns txtPoints" style="margin-top: 30px; padding:0; text-align: center;">
+								<div class="small-12 medium-12 large-12 columns txtPoints text-center">
 									<div>
-										<p class="ptsMargin puntos puntosSize" ><b>{{$rewards->points}}</b></p>
+										<p class="ptsMargin puntos puntosSize" >{{$rewards->points}}</p>
 										<p class="ptsMargin puntos ptsFont">PUNTOS</p>
 									</div>
 								</div>
@@ -138,13 +137,14 @@
 
 	
 	<script type="text/javascript">
+		/*función mapa ubicaciones comercios (Google Maps - Javascript API)*/
 		function initMap() {
 			var myLatlng = {lat: {{$branchs[0]->lat}}, lng:{{$branchs[0]->long}}}; //Ubicación primer comercio por defecto
 		  	var map = new google.maps.Map(document.getElementById('map'), {
 		    	center: myLatlng,
 		    	zoom: 12
 		  	});
-		  	var infoWindow;
+		  	var infoWindow = new google.maps.InfoWindow({map:map});;
 		  	var pos, posB;
 		  	//Marcadores
 		  	@foreach($branchs AS $Branchs)
@@ -166,10 +166,9 @@
 
 			@endforeach		  
 			//fin Marcadores
-			// Geolocation.
+			// Geolicalización
 			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					infoWindow = new google.maps.InfoWindow({map});			
+				navigator.geolocation.getCurrentPosition(function(position) {			
 			      	pos = {
 			        lat: position.coords.latitude,
 			        lng: position.coords.longitude
@@ -181,17 +180,19 @@
 			      
 			    });
 			  } else {
-			    // Browser doesn't support Geolocation
+			    // Navegador no soporta geolocalización
 			    handleLocationError(false, infoWindow, map.getCenter());
 			  }	
 			   
 		}
 		function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		  infoWindow.close();
 		  infoWindow.setPosition(pos);
 		  infoWindow.setContent(browserHasGeolocation ?
 		                        'Error: El servicio de Geolocalización falló.' :
 		                        'Error: Tu navegador no soporta Geolocalización');
 		}
+		//fin geolocalización
     </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">

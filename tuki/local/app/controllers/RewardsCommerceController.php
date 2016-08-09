@@ -1,27 +1,26 @@
 <?php 
+	
+	/*Controlador ficha comercio para recompensas disponibles */
+	class RewardsCommerceController extends BaseController{
 
-	class RewardsTestController extends BaseController{
-
-		//models -> Branch, Commerce, Rewards
+		//models : Branch, Commerce, Rewards
 
 		public function showRewards($id){
 
-			$rewardTest = new Reward;
+			$reward = new Reward;
 			$commerceInfo = new Commerce;
 			$branchInfo = new Branch;
 
 			$commerceInformation = $commerceInfo->getCommerceInformation($id);
 			$branchsInfo = $branchInfo->getBranchInformation($id);
-			$rewardsTest = $rewardTest->getCommerceRewardsTest($id);
+			$rewards = $reward->getCommerceRewards($id);
 
-			return View::make('rewardsCommerce')
-
-			->with('commerce',$commerceInformation)
-			
-			->with('rewards',$rewardsTest)
-
-			->with('branchs',$branchsInfo);
+			return View::make('rewards.rewardtest')
+						->with('commerce',$commerceInformation)
+						->with('rewards',$rewards)
+						->with('branchs',$branchsInfo);
 		}
+
 	}
 
  ?>

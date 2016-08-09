@@ -60,12 +60,10 @@ class Branch extends Eloquent
 		}
 		return false;
 	}
-	/* Información de los comercios para las fichas */ 
+	/* Información de los comercios para la ficha*/ 
 	public function getBranchInformation($id){
-
 		$dataBranchInformation = Branch::where( 'idCommerce', '=', $id )
-		->get();
-
+								->get();
 		return $dataBranchInformation;
 	}
 

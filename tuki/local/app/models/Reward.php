@@ -55,28 +55,23 @@ class Reward extends Eloquent{
 		}
 		return false;
 	}
-	/* Obtener recompensas del comercio mediante su $id para la ficha y su status */
-	public function getCommerceRewardsTest($id){
-
-
-		$dataRewardTest =  Reward::where( 'idCommerce', $id )
-		->where('status', 1)
-		->get();
-
-		return $dataRewardTest;
+	/* Obtener recompensas del comercio mediante su $id y status para la ficha */
+	public function getCommerceRewards($id){
+		$dataRewards = Reward::where( 'idCommerce', $id )
+						->where('status', 1)
+						->get();
+		return $dataRewards;
 	}
 
-	public function getRewardCommerce($idComm, $idRew){
-
-		$dataRewardComm = Reward::where('idCommerce', $idComm)
-		->where('id', $idRew)
-		->where('status', 1)
-		->get();
-		if (!$dataRewardComm->isEmpty()){
-    		$dataRewardComm = $dataRewardComm->first();
+	/* Obtener recompensa mediante su id para la ficha */
+	public function getCommReward($idComm, $idRew){
+		$dataCommReward = Reward::where('idCommerce', $idComm)
+						->where('id', $idRew)
+						->get();
+		if (!$dataCommReward->isEmpty()){
+    		$dataCommReward = $dataCommReward->first();
 		}
-
-		return $dataRewardComm;
+		return $dataCommReward;
 	}
 
 	

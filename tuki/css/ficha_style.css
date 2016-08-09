@@ -1,110 +1,171 @@
+*{
+	font-family: 'Roboto', sans-serif;
+}
+#btnColor{
+	background-color: black;
+}
+.logoContenedor{
+	height: 350px;		
+}
+.infoPadding{
+	
+	padding-bottom: 7.5px;
 
-	*{
-		font-family: 'Roboto', sans-serif;
-	}
-	#btnColor{
-		background-color: black;
-	}
-	.logoContenedor{
-		height: 350px;		
-	}
-	.infoPadding{
-		
-		padding-bottom: 7.5px;
+}
+.infoSize{
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0px;
+}
+.infoPaddingMap{
+	
+	padding-top: 7.5px;
+}
+.tamInfo{
+	height: 168px;
+}
+.rewardsPadding{
+	padding: 0px;
+	padding-bottom: 20px;
+}
+.rowTopPaddingRegresar{
+	padding-top: 100px;
+}
+.centerLogo{
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 90% 90%;
+	height: 100%;
+	width: 100%;
+}
+.imgCenter{
+	height: 100%;
+}
+.logoPadding{
+	padding-bottom: 10px;
+	
+}
+.divRewards{
+	width: 100%;
+	height: 100%;
+	background-color: red;
 
-	}
-	.infoSize{
-		font-size: 20px;
-		font-weight: bold;
-		margin: 0px;
-	}
-	.infoPaddingMap{
-		
-		padding-top: 7.5px;
-	}
-	.tamInfo{
-		height: 168px;
-	}
-	.rewardsPadding{
-		padding: 0px;
-		padding-bottom: 20px;
-	}
-	.rowTopPaddingRegresar{
-		padding-top: 100px;
-	}
+}
+.inlineReward{
+	display: inline-block;
+}
+.paddingTop20{
+	padding-top: 20px;
+}
+.paddingLeft20{
+	padding-left: 20px;
+}
+.linkTukiStyle{
+	color: black;
+	text-decoration: underline;
+}
+#map {
+display: block;
+width: 100%;
+height: 100%;
+}
+.min-W{
+	min-width: 300px;
+	padding-top: 50px;
+
+}
+.infoRewTxt{
+	text-transform: uppercase;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0;
+}
+.divInfoRew{
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+}
+.txtPoints{
+	margin-top: 30px; 
+	padding:0;
+}
+.puntos{
+	color:white;
+}
+.puntosSize{
+	font-family: 'Open Sans', sans-serif;		
+	font-size: 1.61em;
+}
+.ptsFont{
+	font-family: 'Oswald', sans-serif;
+	font-size: 1em;
+}
+.ptsMargin{
+	margin: 0;
+	margin-bottom: 12px;
+}
+.imgMap{
+	width: 30px;
+	height: 30px;
+}
+
+.paddingRightIcon{
+	padding-right: 10px;
+}
+.tamRowInfoN{
+	height: 40%;
+}
+.tamRowInfoD{
+	height: 60%;
+}
+.commerceName{
+	text-transform: uppercase;
+
+}
+@media screen and (min-width: 390px) and (max-width: 639px) {
 	.centerLogo{
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 90% 90%;
-		height: 100%;
-		width: 100%;
+		background-size: 50% 80%;
 	}
-	.imgCenter{
-		height: 100%;
+	.txtPoints{
+		margin-bottom: 2px;
 	}
-	.logoPadding{
-		padding-bottom: 10px;
-		
-	}
-	.divRewards{
-		width: 100%;
-		height: 100%;
-		background-color: red;
-
-	}
-	.inlineReward{
-		display: inline-block;
-	}
-	.paddingTop20{
-		padding-top: 20px;
-	}
-	.paddingLeft20{
-		padding-left: 20px;
-	}
-	.linkTukiStyle{
-		color: black;
-		text-decoration: underline;
-	}
-	#map {
-    display: block;
-    width: 100%;
-    height: 100%;
-	}
-	.min-W{
-		min-width: 300px;
-		padding-top: 50px;
-
-	}
-	.infoRewTxt{
-		text-transform: uppercase;
-		margin: 0;
-	}
-	.divInfoRew{
-		width: 100%;
-		height: 100%;
-		padding: 10px;
-	}
-	.puntos{
-		color:white;
-	}
-	.puntosSize{		
-		font-size: 1.61em;
-	}
-	.ptsFont{
-		font-family: 'Oswald', sans-serif;
-		font-size: 1.5em;
+	.puntosSize{
+		font-size: 2.5em;
 	}
 	.ptsMargin{
-		margin: 0;
-		margin-bottom: 5px;
+		margin-bottom: -5px;
 	}
-	.imgMap{
-		width: 30px;
-		height: 30px;
+	.ptsFont{
+		font-size: 1.3em;
 	}
-
-	.paddingRightIcon{
-		padding-right: 10px;
+}
+@media screen and (min-width: 460px) and (max-width: 639px){
+	.puntosSize{
+		font-size: 3em;
+	}
+	.ptsMargin{
+		margin-bottom: -7px;			
+	}
+	.txtPoints{
+		margin-top: 17px;
+	}
+	.ptsFont{
+		font-size: 1.5em;
+	}
+}
+@media screen and (max-width: 500px) {
+	.logoContenedor{
+		height: 250px;			
+	}
+	.centerLogo{
+		background-size: 60% 80%;
+	}
+	.branchInformation{
+		font-size: 15px;
+	}
+}
+@media screen and (min-width: 640px){
+	.centerLogo{
+		background-size: 100% 50%;
 	}
 	.tamRowInfoN{
 		height: 40%;
@@ -113,91 +174,70 @@
 		height: 60%;
 	}
 	.commerceName{
-		text-transform: uppercase;
-
+		font-size: 30px;
 	}
-	@media screen and (min-width: 390px) and (max-width: 639px) {
-		.centerLogo{
-			background-size: 50% 80%;
-		}
-		.txtPoints{
-			margin-bottom: 5px;
-		}
-		.puntosSize{
-			font-size: 2.2em;
-		}
-		.ptsMargin{
-			margin-bottom: -5px;
-		}
-
+	.branchInformation{
+		font-size: 15px;
 	}
-	@media screen and (max-width: 500px) {
-		.logoContenedor{
-			height: 250px;			
-		}
-		.centerLogo{
-			background-size: 60% 80%;
-		}
-		.branchInformation{
-			font-size: 15px;
-		}
+	.paddingTop20{
+		padding-top: 0px;
 	}
-	@media screen and (min-width: 640px){
-		.centerLogo{
-			background-size: 100% 50%;
-		}
-		.tamRowInfoN{
-			height: 40%;
-		}
-		.tamRowInfoD{
-			height: 60%;
-		}
-		.commerceName{
-			font-size: 30px;
-		}
-		.branchInformation{
-			font-size: 15px;
-		}
-		.paddingTop20{
-			padding-top: 0px;
-		}
 
+}
+@media screen and (min-width: 740px){
+	.centerLogo{
+		background-size: 90% 60%;
 	}
-	@media screen and (min-width: 740px){
-		.centerLogo{
-			background-size: 90% 60%;
-		}
-		.tamRowInfoN{
-			height: 40%;
-		}
-		.tamRowInfoD{
-			height: 60%;
-		}
-		.commerceName{
-			font-size: 40px;
-		}
-		.branchInformation{
-			font-size: 20px;
-		}
-		.branchInformationAddress{
-			font-size: 15px;
-		}
-		.ptsMargin{
-			margin-bottom: 0px;
-		}
-		.puntosSize{
-			font-size: 2em;
-		}
+	.tamRowInfoN{
+		height: 40%;
+	}
+	.tamRowInfoD{
+		height: 60%;
+	}
+	.commerceName{
+		font-size: 40px;
+	}
+	.branchInformation{
+		font-size: 20px;
+	}
+	.branchInformationAddress{
+		font-size: 15px;
+	}
+	.ptsMargin{
+		margin-bottom: 7px;
+	}
+	.puntosSize{
+		font-size: 2em;
+	}
 
+}
+
+
+@media screen and (min-width: 1024px){
+	.centerLogo{
+		background-size: 90% 80%;
+	}
+	.branchInformationAddress{
+		font-size: 20px;
+	}
+	.puntosSize{
+		font-size: 1.8em;
+	}
+	.ptsMargin{
+		margin-bottom: 9px;
 	}
 
 	
-	@media screen and (min-width: 1024px){
-		.centerLogo{
-			background-size: 90% 80%;
-		}
-		.branchInformationAddress{
-			font-size: 20px;
-		}
+}
 
+@media screen and (min-width: 1200px){
+	.puntosSize{
+		font-size: 2.2em;
 	}
+	.ptsMargin{
+		margin-bottom: 0px;
+	}
+	.ptsFont{
+		font-size: 1.3em;
+	}
+}

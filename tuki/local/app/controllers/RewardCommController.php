@@ -1,6 +1,6 @@
 <?php
-	
-	class RewardCommerceController extends BaseController{
+	/*Controlador para mostrar recompensa elegida*/
+	class RewardCommController extends BaseController{
 
 		public function showRewardCommerce($idCommerce, $idReward){
 
@@ -9,13 +9,13 @@
 			$branch = new Branch;
 
 			$commerceInfo = $commerce->getCommerceInformation($idCommerce);
-			$rewardInfo = $reward->getRewardCommerce($idCommerce, $idReward);
+			$rewardInfo = $reward->getCommReward($idCommerce, $idReward);
 			$branchInfo = $branch->getBranchInformation($idCommerce);
 
 			return View::make('rewards.rewardCommerce')
-			->with('commerce',$commerceInfo)
-			->with('reward',$rewardInfo)
-			->with('branch',$branchInfo);
+						->with('commerce',$commerceInfo)
+						->with('reward',$rewardInfo)
+						->with('branch',$branchInfo);
 
 		}
 	}
